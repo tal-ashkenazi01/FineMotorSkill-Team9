@@ -1,0 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+@font-face {
+  font-family: 'SpaceMono';
+  src: url('assets/SpaceMono-Bold.ttf') format('truetype');
+}
+
+.spaceButton {
+  font-family: 'SpaceMono';
+}
