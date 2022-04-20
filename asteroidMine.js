@@ -3,9 +3,9 @@ let coords = [];
 
 function preload() {
   // LOADING IN THE TEXTURE FOR THE PLANET
-  planet_texture = loadImage("assets/planet_texture_map.jpeg");
+  planet_texture = loadImage("cautious-bassoon/assets/planet_texture_map.jpeg");
   // LOAD IN THE FONT FOR THE TEXT
-  SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  SpaceMono = loadFont("cautious-bassoon/assets/SpaceMono-Bold.ttf");
 }
 
 function setup() {
