@@ -57,8 +57,8 @@ function setup() {
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
-    window.location.href =
-      "https://editor.p5js.org/DillPickleBoy22/full/pjL_-Uce1";
+    location.href =
+      "asteroidShoot.html";
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
