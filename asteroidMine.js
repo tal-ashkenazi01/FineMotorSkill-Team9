@@ -73,7 +73,7 @@ function setup() {
   // CREATE THE BUTTON FOR TYPE OF GAME SESSION
   scored = createButton("Play!");
   scored.size(200);
-  scored.position(300, 350, 'relative');
+  scored.position(300, -450, 'relative');
   scored.mousePressed(setScored);
 
   // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
