@@ -1,285 +1,544 @@
-let ring_graphics;
-let coords = [];
+// LOGGING FLAG TO CONTROL THE PRINTING STATEMENTS
+let logging = false;
 
+// ARRAY FOR THE POINTS OF THE ARRAY
+let vertex_array = [];
+
+// ARRAY FOR THE DISTANCES OF THE POINTS
+let distance_array = [];
+// INDEX 0: point 0 to 1
+// INDEX 1: point 1 to 2
+// INDEX 2: point 2 to 3
+// INDEX 3: point 3 to 0
+
+// FLAG FOR STARTING THE GAME
+let started = false;
+
+///////////////////////////
+// SET UP THE GAME SESSION
+let passed_menu = false;
+let casual = false;
+let scored;
+let casual_game;
+let astCount = 0;
+let endScreenFlag = false;
+///////////////////////////
+
+// MAXIMUM SCORE
+let MAX_SCORE = 100;
+let user_score = 0;
+
+// THE TWO VARAIBLES MARK THE START OF THE LINE DRAWING
+let start_x = 0;
+let start_y = 0;
+
+// VARIABLES TO SCORE THE ACCURACY
+let correct = 0.0;
+let incorrect = 0.0;
+let accuracy = 0.0;
+let total_accuracy = 0.0;
+let average_accuracy = 0.0;
+let objects_run_through = 0.0;
+
+// LOAD FONTS FOR THE GAME
 function preload() {
-  // LOADING IN THE TEXTURE FOR THE PLANET
-  planet_texture = loadImage("cautious-bassoon/assets/planet_texture_map.jpeg");
-  // LOAD IN THE FONT FOR THE TEXT
-  SpaceMono = loadFont("cautious-bassoon/assets/SpaceMono-Bold.ttf");
+  SpaceMono = loadFont("/assets/SpaceMono-Bold.ttf");
 }
 
 function setup() {
-  createCanvas(800, 800, WEBGL);
+  // SCREEN SIZE MODIFIERS
+  // MODIFY THE SCREEN SIZE VALUES TO CHANGE THE SIZE OF THE GAME
+  screen_size = [800, 800];
+  center = [screen_size[0] / 2, screen_size[1] / 2];
+
+  createCanvas(screen_size[0], screen_size[1]);
+  background("#000000");
+
+  // TEXT SETUP
   noStroke();
+  fill("#FFC600");
+  textAlign(CENTER);
+  textSize((center[0] / 200) * 25);
+  textFont(SpaceMono);
+  text("Click anywhere to begin!", center[0], center[1] * 0.2);
 
-  // GENERATE THE IMAGE FOR THE RINGS
-  generateRingImage();
+  // RESET TEXT SIZE FOR ALL OTHER TEXT
+  textSize((center[0] / 200) * 15);
 
-  // MAKE THE CAMERA
-  sceneCamera = createCamera();
-  sceneCamera.lookAt(0, 0, 0);
-  sceneCamera.ortho(-200, 200, -200, 200, 0, 1000); //-width / 2, width / 2, -height / 2, height / 2, 0, 500)
+  // CREATE THE BUTTON FOR TYPE OF GAME SESSION
+  scored = createButton("Play!");
+  scored.size(200);
+  scored.position(300, 350);
+  scored.mousePressed(setScored);
 
-  // MAKE STAR COORDS;
-  if (coords) {
-    for (let i = 0; i < 500; i++) {
-      coords.push([
-        random(-windowWidth / 2, windowWidth / 2),
-        random(-height / 2, height / 2),
-      ]);
-    }
-  }
+  // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
+  casual_game = createButton("Practice");
+  casual_game.size(200);
+  casual_game.position(300, 450);
+  casual_game.mousePressed(setCasual);
 
-  // CREATE BUTTONS FOR NAVIGATION
-  MiningButton = createButton("Asteroid Mining");
-  MiningButton.position(150, 600);
-  MiningButton.size(200);
-  MiningButton.style("color", "#FFC600");
-  MiningButton.style("background-color", "#5800FF");
-  MiningButton.style("font-size", "20px");
-  MiningButton.style("border", "none");
-  MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
-  MiningButton.class("spaceButton");
-  MiningButton.mousePressed(function () {
-    window.location.href =
-      "https://editor.p5js.org/tal.ashkenazi/full/6aOtktsFo";
-  }); //put your game URL here
+  // STYLES OF THE BUTTONS
+  scored.style("color", "#FFC600");
+  scored.style("background-color", "#5800FF");
+  scored.style("font-size", "20px");
+  scored.style("border", "none");
+  scored.style("box-shadow", "0 0 0 .5em #5800FF");
+  scored.class("spaceButton");
 
-  ShootButton = createButton("Asteroid Shoot");
-  ShootButton.position(450, 600);
-  ShootButton.size(200);
-  ShootButton.style("color", "#FFC600");
-  ShootButton.style("background-color", "#5800FF");
-  ShootButton.style("font-size", "20px");
-  ShootButton.style("border", "none");
-  ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
-  ShootButton.class("spaceButton");
-  ShootButton.mousePressed(function () {
-    window.location.href =
-      "https://editor.p5js.org/DillPickleBoy22/full/pjL_-Uce1";
-  }); //put your game URL here
+  casual_game.style("color", "#FFC600");
+  casual_game.style("background-color", "#5800FF");
+  casual_game.style("font-size", "20px");
+  casual_game.style("border", "none");
+  casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
+  casual_game.class("spaceButton");
 
-  PilotButton = createButton("Starship Pilot");
-  PilotButton.position(450, 675);
-  PilotButton.size(200);
-  PilotButton.style("color", "#FFC600");
-  PilotButton.style("background-color", "#5800FF");
-  PilotButton.style("font-size", "20px");
-  PilotButton.style("border", "none");
-  PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
-  PilotButton.class("spaceButton");
-  PilotButton.mousePressed(function () {
-    window.location.href = "http://127.0.0.1:5500/maze/";
-  }); //URL to maze game
-
-  TranslateButton = createButton("Alien Translate");
-  TranslateButton.position(150, 675);
-  TranslateButton.size(200);
-  TranslateButton.style("color", "#FFC600");
-  TranslateButton.style("background-color", "#5800FF");
-  TranslateButton.style("font-size", "20px");
-  TranslateButton.style("border", "none");
-  TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
-  TranslateButton.class("spaceButton");
-  TranslateButton.mousePressed(function () {
-    window.location.href =
-      "https://editor.p5js.org/Carson203/sketches/PJHVkRIeY";
-  }); //put your game URL here
-  
-  // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
-  returnButton = createButton("Return to Main Menu");
-  returnButton.position(200, 900);
-  returnButton.size(400);
-  returnButton.style("color", "#FFC600");
-  returnButton.style("background-color", "#5800FF");
-  returnButton.style("font-size", "20px");
-  returnButton.style("border", "none");
-  returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
-  returnButton.class("spaceButton");
-  returnButton.mousePressed(); // removeIframe);
-  // DON'T HOW THE RETURN BUTTON UNTIL IT'S GENERATED
-  returnButton.hide();
+  // THE ACTUAL INITIAL OBJECT SETUP
+  stroke("#E900FF");
+  strokeWeight(6);
+  drawNewTrace();
 }
 
 function draw() {
-  background(0);
+  calculateAccuracy();
 
-  // ORBIT CONTROL
-  // orbitControl(10, 10);
+  if (!mouseIsPressed && started && !endScreenFlag) {
+    // RESET TEXT SIZE FOR ALL OTHER TEXT
+    textSize((center[0] / 200) * 15);
 
-  // DEFINE CAMERA ROTATION
-  let rotation = map(mouseX, 0, windowWidth, -PI / 20, PI / 20, 0);
+    // UPDATE GAME STATE
+    started = false;
+    background("#000000");
 
-  // GENERATE THE TEXT
-  push();
-  noStroke();
-  blendMode(ADD);
-  fill("#FFC600");
-  textAlign(CENTER, CENTER);
-  textSize(40);
-  textFont(SpaceMono);
-  text("Planet Games", 0, -170);
-  pop();
+    // NEW TRACE GENERATION
+    noFill();
+    stroke("#E900FF");
+    strokeWeight(6);
+    if (logging) {
+      console.log(
+        `Generating a new trace: mouse pressed ${mouseIsPressed} & ${started}`
+      );
+    }
+    drawNewTrace();
 
-  // GENERATE STARRY BACKGROUND
-  generateStarSky(rotation);
+    // SHOW THE ACCURACY TEXT
+    noStroke();
+    fill("#FFC600");
+    text(`Accuracy: ${accuracy.toFixed(2)}`, center[0], center[1] * 0.2);
 
-  // CONTROL CAMERA ROTATION
-  rotateY(rotation);
-  rotateX(rotation / 2);
+    // CALCULATE THE SCORE BASED ON ACCURACY
+    user_score = user_score + MAX_SCORE * accuracy;
+    text(`Score: ${user_score.toFixed(0)}`, center[0], center[1] * 1.8);
 
-  // ADD SOME LIGHT SOURCES
-  ambientLight(70);
-  directionalLight(250, 250, 250, 0.4, 0.4, -1);
+    // CALCULATE THE AVERAGE ACCURACY
+    if (total_accuracy == 0) {
+      objects_run_through = 1;
+    }
+    total_accuracy += accuracy;
+    average_accuracy = total_accuracy / objects_run_through;
+    objects_run_through++;
 
-  generatePlanet();
-  makeRings();
-}
 
-function generatePlanet() {
-  push();
-  // ROTATE THE PLANET ALONG THE Y AXIS
-  rotateY(frameCount * 0.01);
-
-  // SET THE TEXTURE OF THE PLANET
-  texture(planet_texture);
-
-  // CREATE THE PLANET
-  shininess(10);
-  blendMode(ADD);
-  sphere(70);
-  pop();
-}
-
-function generateRingImage() {
-  // SET UP THE RING COLOR
-  ring_graphics = createGraphics(200, 200);
-  ring_graphics.background(255);
-  ring_graphics.noStroke();
-  ring_graphics.drawingContext.globalAlpha = 1;
-  ring_graphics.ellipse(
-    ring_graphics.width / 2,
-    ring_graphics.height / 2,
-    100,
-    100
-  );
-  let grad_color = ring_graphics.drawingContext.createRadialGradient(
-    100,
-    100,
-    50,
-    100,
-    100,
-    100
-  );
-  grad_color.addColorStop(0, "black");
-  grad_color.addColorStop(0.15, "#cc8237"); // #6A0572
-  grad_color.addColorStop(0.25, "#e1913f"); // #9A0F98
-  grad_color.addColorStop(0.45, "#cc8237"); // #6A0572
-  grad_color.addColorStop(0.5, "black");
-  grad_color.addColorStop(0.55, "#f4a15c"); // #180750
-  grad_color.addColorStop(0.75, "#ffc594"); // #6A0572
-  grad_color.addColorStop(0.99, "#cc8237"); // #EA0599
-  grad_color.addColorStop(1, "black");
-  ring_graphics.drawingContext.fillStyle = grad_color;
-  ring_graphics.circle(100, 100, 300);
-
-  // MAKE SMALL ASTEROIDS
-  for (k = 0; k < 50; k++) {
-    let pos = random(0, TWO_PI);
-    let radius = 80 + random(-3, 3);
-
-    ring_graphics.fill("black");
-    ring_graphics.drawingContext.shadowBlur = 1;
-    ring_graphics.drawingContext.shadowColor = "white";
-
-    ring_graphics.circle(
-      cos(pos) * radius + 100,
-      sin(pos) * radius + 100,
-      random(1, 2)
+    // DISPLAY THE AVERAGE ACCURACY
+    text(
+      `Average accuracy: ${average_accuracy.toFixed(2)}`,
+      center[0],
+      center[1] * 1.6
     );
 
-    let outer_pos = pos - random(0, PI);
-    let outer_radius = radius + random(10, 15);
+    // RESET THE ACCURACY SCORES
+    correct = 0.0;
+    incorrect = 0.0;
 
-    ring_graphics.circle(
-      cos(outer_pos) * outer_radius + 100,
-      sin(outer_pos) * outer_radius + 100,
-      random(1, 3)
-    );
+    ///////////////////////////
+    // IF THE GAME IS A SCORED ONE, THEN SHOW THE REMAINING SHAPES
+    if (!casual) {
+      push();
+      noStroke();
+      fill("#FFC600");
+      textAlign(CENTER, BASELINE);
+      textSize((center[0] / 200) * 25);
+      textFont(SpaceMono);
+      text(`${astCount}/10`, center[0] * 1.8, center[1] * 0.2);
+      astCount++;
+      pop();
+
+      // IF THE USER HAS GONE THROUGH TEN DIFFERENT ASTEROIDS, RESET THEM TO THE START
+      if (astCount > 10) {
+        // CALL THE END SCREEN
+        endScreen();
+      }
+    }
+    ///////////////////////////
   }
 }
 
-function makeRings() {
-  // MAKE THE RING TURN DIFFERENTLY FROM THE PLANET
-  push();
+function mouseDragged() {
+  ///////////////////////////
+  // CHECK IF THE USER HAS GOTTEN PASSED THE MENU
+  if (passed_menu && !endScreenFlag) {
+    ///////////////////////////
+    // CHECK IF THE DRAWING HAS BEEN STARTED YET
+    if (!started && mouseIsPressed) {
+      // SET THE START POSITION OF THE LINE
+      start_x = mouseX;
+      start_y = mouseY;
+      started = true;
+    } else if (
+      abs(start_x - mouseX) <= 5 &&
+      abs(start_y - mouseY) <= 5 &&
+      (correct > 10 || incorrect > 10)
+    ) {
+      // RETURN IF THE MOUSE IS AT THE START POSITION
+      // console.log("THIS BLOCK WAS ENTERED")
+      mouseIsPressed = false;
+    }
 
-  // APPLY THE RING TEXTURE
-  texture(ring_graphics);
+    // DECLARE A NEW BOOOLEAN TO CONTROL WHETHER THE LINE IS ON THE OBJECT OR NOT
+    let on_line = calculateCollision();
 
-  // ROTATE THE RING
-  rotateX(PI / 4);
-  rotateY(-PI / 4);
-  rotate(frameCount * -0.01);
+    // CHANGE THE STOKE WEIGHT OF THE LINE
+    strokeWeight(3);
 
-  // SET TRANSPARENCY
-  tint(255, 90);
-  blendMode(SCREEN);
-  smooth();
-  ellipse(0, 0, 300, 300, 50);
+    // BOOLEAN CHECK TO CONTROL THE COLOR OF THE LINE
+    if (mouseIsPressed) {
+      if (on_line) {
+        stroke("green");
+        correct += 1.0;
+      } else {
+        stroke("red");
+        incorrect += 1.0;
+      }
+    }
 
-  pop();
-
-  // SHOW THE RING IMAGE
-  // image(ring_graphics, 0, 0)
-}
-
-function generateStarSky(rotation) {
-  let posX = 0;
-  let posY = 0;
-
-  for (let i = 0; i < 500; i++) {
-    push();
-    translate(posX, posY, -30);
-    posX = coords[i][0] - map(rotation, -PI / 10, PI / 10, -20, 20, 0);
-    posY = coords[i][1];
-
-    // EMISSIVE MATERIAL
-    // CHOOSE A RANDOM STARLIGHT COLOR
-    // emissiveMaterial(random(["#ffcda5", "#ffd250", "#ff8220", "#fff220", "#ff5000"]))
-    // CREATE THE STARS
-    sphere(1);
-    pop();
+    // DRAW THE ACTUAL LINE
+    line(mouseX, mouseY, pmouseX, pmouseY);
   }
 }
 
-/*
-function setUpIframe() {
-  // REMOVE THE CANVAS
-  noCanvas();
-  
-  // HIDE THE OLD BUTTONS
-  MiningButton.hide();
-  ShootButton.hide();
-  PilotButton.hide();
-  TranslateButton.hide();
-  
-  // ADD THE IFRAMES
-  let body = document.getElementsByTagName("BODY")[0];
-  let newGame = document.createElement('iframe');
-  newGame.setAttribute('src', "https://editor.p5js.org/tal.ashkenazi/full/6aOtktsFo");
-  newGame.setAttribute('width', '800');
-  newGame.setAttribute('height', '900');
-  body.append(newGame);
-  
-  returnButton.show();
+function drawNewTrace() {
+  // GENERATE AN ASTEROID UNDERNEATH THE TRACE
+  drawAsteroid();
+
+  // RESET THE STROKE
+  stroke("#E900FF");
+  strokeWeight(6);
+
+  // CREATE A NEW SHAPE TO TRACE
+  beginShape();
+  for (let count = 0; count < 4; count++) {
+    // GENERATE NEW VERTEX POINT COORDINATES
+    if (count == 0) {
+      vertex_x = center[0] - 50 - random(50);
+      vertex_y = center[1] - 50 - random(50);
+    } else if (count == 1) {
+      vertex_x = random(50) + (center[0] + 50);
+      vertex_y = center[1] - 50 - random(50);
+    } else if (count == 2) {
+      vertex_x = center[0] + 50 + random(50);
+      vertex_y = center[1] + 100 - random(50);
+    } else if (count == 3) {
+      vertex_x = center[0] - 50 - random(50);
+      vertex_y = random(50) + (center[1] + 50);
+    }
+
+    // LOGGING THE COORDINATES
+    if (logging) {
+      console.log(
+        `Point ${count}\nX Coordinate: ${vertex_x}\nY Coordinate: ${vertex_y}`
+      );
+    }
+
+    // CREATE A NEW VERTEX POINT
+    vertex(vertex_x, vertex_y);
+
+    // CREATE CIRCLE AT THIS POINT
+    drawingContext.setLineDash([0, 0]);
+    fill("#E900FF");
+    circle(vertex_x, vertex_y, 10);
+
+    // ADD THE ARRAY POINTS TO THE ARRAY THAT TRACKS THE POINT
+    vertex_array[count] = [vertex_x, vertex_y];
+  }
+
+  // FINAL SETTINGS FOR THE NEW TRACE THAT IS GENERATED
+  drawingContext.setLineDash([10, 10]);
+  noFill();
+
+  // COMPLETE THE TRACE
+  endShape(CLOSE);
+  calculateDistances();
+
+  // RESET THE LINE DASHES BEFORE EXITING
+  drawingContext.setLineDash([0, 0]);
+
+  return vertex_array;
 }
 
-function removeIframe() {
-  let iframe = document.getElementsByTagName("IFRAME")[0];
-  iframe.remove();
-  createCanvas(800, 800, WEBGL);
+function drawOldTrace(oldVertex) {
+  let points = [];
+
+  // RESET THE STOKE
+  stroke("#E900FF");
+  strokeWeight(6);
+
+  // BEGIN THE OLD SHAPE
+  beginShape();
+  // ADD ALL THE POINTS AS VERTEXES
+  for (points of oldVertex) {
+    vertex(points[0], points[1]);
+
+    // CREATE CIRCLE AT THIS POINT
+    circle(points[0], points[1], 10);
+  }
+  endShape(CLOSE);
+}
+
+function calculateDistances() {
+  // LOGGING TO CHECK FOR EXTRANEOUS RUNS
+  if (logging) {
+    console.log("DISTANCES BETWEEN VERTEXES CALCULATED");
+  }
+
+  // FOR ALL THE POINTS, CALCULATE THEIR DISTANCES FROM EACH OTHER AND RECORD THEM TO THE DISTANCE ARRAY
+  for (i = 0; i < 4; i++) {
+    if (i == 3) {
+      distance_array[i] = dist(
+        vertex_array[i][0],
+        vertex_array[i][1],
+        vertex_array[0][0],
+        vertex_array[0][1]
+      );
+    } else {
+      distance_array[i] = dist(
+        vertex_array[i][0],
+        vertex_array[i][1],
+        vertex_array[i + 1][0],
+        vertex_array[i + 1][1]
+      );
+    }
+  }
+}
+
+function calculateCollision() {
+  // VARIABLES TO SET UP THE DISTANCES
+  let first_point_dist = 0;
+  let second_point_dist = 0;
+
+  // LOGGING
+  if (logging) {
+    console.log("\n\nNEW CALCULATION");
+  }
+
+  // ITERATION THROUGH THE POINTS AND THE DISTANCES
+  for (i = 0; i < 4; i++) {
+    // GET THE VALUES OF THE DISTANCES AND CREATE NEW DISTANCES
+    first_point_dist = dist(
+      mouseX,
+      mouseY,
+      vertex_array[i][0],
+      vertex_array[i][1]
+    );
+
+    // IF THE LOOP IS ON 3, CALCULATE THE DISTANCE TO POINT 0
+    if (i == 3) {
+      second_point_dist = dist(
+        mouseX,
+        mouseY,
+        vertex_array[0][0],
+        vertex_array[0][1]
+      );
+    } else {
+      second_point_dist = dist(
+        mouseX,
+        mouseY,
+        vertex_array[i + 1][0],
+        vertex_array[i + 1][1]
+      );
+    }
+
+    // LOGGING TO SHOW THE DISTANCES
+    if (logging) {
+      console.log(`NEW ITERATION ${i}`);
+      console.log(`First point distance ${first_point_dist}\nSecond point 
+                distance ${second_point_dist}\nDistance: ${distance_array[i]}`);
+    }
+
+    // IF THERE IS A COLLISION, RETURN TRUE; .5 CONTROLS MAX DISTANCE
+    if (
+      first_point_dist + second_point_dist - distance_array[i] < 0.5 ||
+      first_point_dist < 3
+    ) {
+      // LOGGING
+      // console.log("There was a hit");
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function calculateAccuracy() {
+  // CHECK TO RECALCULATE THE ACCURACY
+  if ((correct != 0 || incorrect != 0) && started) {
+    // LOGGING
+    if (logging) {
+      console.log("CALCULATING ACCURACY");
+    }
+
+    // CALCULATE THE ACCURACY
+    accuracy = float(correct) / (float(incorrect) + float(correct));
+
+    // LOGGING VALUES
+    if (logging) {
+      console.log("correct: " + correct);
+      console.log("incorrect: " + incorrect);
+      console.log(`Accuracy: ${accuracy.toFixed(2)}`);
+    }
+  }
+}
+
+function drawAsteroid() {
+  // RANDOMIZE THE SEED
+  noiseSeed(random(1000));
+
+  // BEGIN ASTEROID SHAPE
+  beginShape();
+  for (let i = 0; i <= TWO_PI; i += 0.01) {
+    let xoff = map(cos(i), -1, 1, 0, 2);
+    let yoff = map(sin(i), -1, 1, 0, 2);
+    let r = map(noise(xoff, yoff, 0), 0, 1, center[0] * 0.4, center[0] * 0.55);
+    let x = r * cos(i) + center[0];
+    let y = r * sin(i) + center[1];
+    vertex(x, y);
+  }
+
+  // ASTEROID DISPLAY SETTINGS
+  fill("#94908D");
+  stroke("black");
+  strokeWeight(1);
+
+  // BORDER SHADOWS FOR THE ASTEROID BODY
+  drawingContext.shadowBlur = 10;
+  drawingContext.shadowColor = "white";
+  endShape(CLOSE);
+
+  // SET VALUES FOR THE CRATERS
+  drawingContext.shadowBlur = 0;
+  strokeWeight(1);
+  stroke("#31302E");
+
+  // CREATE A NUMBER OF CRATERS ACROSS THE ASTEROID
+  for (let k = 0; k < TWO_PI; k += PI / 4) {
+    let xoff = map(cos(k), -1, 1, 0, 2);
+    let yoff = map(sin(k), -1, 1, 0, 2);
+    let random_radius = map(
+      noise(xoff, yoff, 0),
+      0,
+      1,
+      center[0] * 0.2,
+      center[0] * 0.45
+    ); //random(50, 90)
+    let x = random_radius * cos(k);
+    let y = random_radius * sin(k);
+    let crater_radius = random(center[0] / 20, center[0] / 10);
+
+    // CREATE A GRADIENT FOR THE COLOR OF THE CRATERS STARTING IN THE MIDDLE OF THE CRATER
+    let grad_color = drawingContext.createRadialGradient(
+      x + center[0],
+      y + center[1],
+      crater_radius,
+      x + center[0],
+      y + center[1],
+      crater_radius * 0.3
+    );
+
+    // ADD THE COLOR STOPS FOR THE CRATER
+    grad_color.addColorStop(0, "#000000");
+    grad_color.addColorStop(1, "#827e7c");
+    drawingContext.fillStyle = grad_color;
+
+    // CREATE THE CRATERS
+    circle(x + center[0], y + center[1], crater_radius);
+  }
+}
+
+///////////////////////////
+function setScored() {
+  // RESET THE TEXT INSIDE OF THE PLAY AGAIN BUTTON
+  scored.html("Play!");
+
+  // IF THE PLAY BUTTON IS PRESSED, THE GAME IS NOT A CASUAL ONE
+  casual = false;
+  scored.hide();
+  casual_game.hide();
+
+  // NO LONG ON THE END SCREEN OR THE START MENU
+  endScreenFlag = false;
+  passed_menu = true;
+  started = true;
+
+  // REDRAW THE MAIN MENU
   redraw();
-  removeButton.hide();
-  
 }
-*/
+
+function setCasual() {
+  // IF THE PRACTICE BUTTON IS PRESSED, THE GAME IS A CASUAL ONE
+  if (!casual) {
+    casual = true;
+    scored.hide();
+    casual_game.hide();
+
+    // MOVE THE CASUAL GAME BUTTON SO THAT IT ALLOWS USERS TO STOP THEIR PROGRESS
+    casual_game.html("End Practice");
+    casual_game.position(300, center[1] * 0.3);
+
+    // NO LONG ON THE END SCREEN OR THE START MENU
+    endScreenFlag = false;
+    passed_menu = true;
+    started = true;
+
+    // REDRAW THE MAIN MENU
+    redraw();
+    casual_game.show();
+  } else {
+    // THE GAME IS RUNNING A CASUAL ONE
+    casual = false;
+    casual_game.hide();
+
+    // RESET THE VALUES OF THE BUTTONS
+    casual_game.html("Practice");
+    endScreen();
+  }
+}
+
+function endScreen() {
+  // STOP THE DRAW LOOP THAT THE GAME OPERATES ON
+  endScreenFlag = true;
+  background("#000000");
+
+  noStroke();
+  fill("#FFC600");
+  textAlign(CENTER);
+  textSize((center[0] / 200) * 25);
+  textFont(SpaceMono);
+  text(`Final score: ${user_score.toFixed(0)}`, 400, 100);
+  text(`Average accuracy: ${average_accuracy.toFixed(2)}`, 400, 200);
+
+  // RESET ALL OF THE VALUES FOR THE GAME
+  average_accuracy = 0.0;
+  accuracy = 0.0;
+  total_accuracy = 0.0;
+  objects_run_through = 0.0;
+  user_score = 0.0;
+  astCount = 0.0;
+
+  // MOVE THE BUTTONS
+  scored.position(300, 400);
+  scored.html("Play again?");
+  casual_game.position(300, 500);
+
+  // SHOW THE BUTTONS AGAIN
+  scored.show();
+  casual_game.show();
+}
+///////////////////////////
