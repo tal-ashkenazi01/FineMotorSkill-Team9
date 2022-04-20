@@ -4,8 +4,15 @@ let radius = 50;
 let score = 0;
 let crater_list = {};
 
-function setup() {
+// SET THE TEXT FONT
+function preload() {
+  SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+}
 
+function setup() {
+  // SET THE TEXT FONT
+  textFont(SpaceMono);
+  
   createCanvas(800, 800);
   background(0);
   x = random(0, 800);
