@@ -563,6 +563,6 @@ function setUpReturn() {
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
     location.href =
-      "..";
+      "index.html";
   }); 
 }
