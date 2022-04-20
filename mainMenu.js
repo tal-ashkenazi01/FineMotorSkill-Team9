@@ -45,8 +45,7 @@ function setup() {
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
   MiningButton.class("spaceButton");
   MiningButton.mousePressed(function () {
-    location.href =
-      "asteroidMine.html";
+    location.href = "asteroidMine.html";
   }); //put your game URL here
 
   ShootButton = createButton("Asteroid Shoot");
@@ -59,8 +58,7 @@ function setup() {
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
-    location.href =
-      "asteroidShoot.html";
+    location.href = "asteroidShoot.html";
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
