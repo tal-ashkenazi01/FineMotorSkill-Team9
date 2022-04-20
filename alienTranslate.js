@@ -5,6 +5,8 @@ let cnv;
 let word;
 let count = 0;
 
+// INPUT BOX 
+let inp;
 
 // SET THE TEXT FONT
 function preload() {
@@ -23,7 +25,7 @@ function setup() {
   word = "this is the letters";
   
   // CREATE THE INPUT BOX
-  let inp = createInput('');
+  inp = createInput('');
   inp.parent(cnv.parent());
   inp.position(400, 400);
   inp.size(100);
