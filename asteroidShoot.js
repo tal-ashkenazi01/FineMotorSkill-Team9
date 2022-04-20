@@ -12,6 +12,7 @@ function preload() {
 function setup() {
   // SET THE TEXT FONT
   textFont(SpaceMono);
+  textAlign(CENTER);
   
   createCanvas(800, 800);
   background(0);
@@ -23,8 +24,8 @@ function setup() {
   // SET UP THE INITIAL TEXT
   fill('#FFC600')
   textSize(30);
-  text("Score: " + score, 340, 55);
-  text("Asteroid Shooter", 290, 30);
+  text("Score: " + score, 400, 55);
+  text("Asteroid Shooter", 400, 30);
   setInterval(timeGame, 1000);
   frameRate(30);  
 }
@@ -43,14 +44,14 @@ function draw() {
   stars(400, 400, 30, 70, 1500);  //Creates a sun in the center
   
   textSize(30);
-  text("Score: " + score, 340, 55);
-  text("Asteroid Shooter", 290, 30);
+  text("Score: " + score, 400, 55);
+  text("Asteroid Shooter", 400, 30);
   
   if(timerVal <= 60) {             
-  text("" + timerVal, 375, 82);
+  text("" + timerVal, 400, 82);
   }
   if(timerVal == 0) {
-  text('Game Over', 320, 105);
+  text('Game Over', 400, 105);
   }
   
   if(crater_list == false){
@@ -137,7 +138,7 @@ function stars(x, y, radius1, radius2, points) {    //Function of the non-moving
 function drawAsteroid(x_offset, y_offset, new_drawing) {  
   // RANDOMIZE THE SEED
   if (new_drawing) {
-    noiseSeed(random(1000));
+    noiseSeed(random(100));
   }
     
   // BEGIN ASTEROID SHAPE
