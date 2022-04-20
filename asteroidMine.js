@@ -74,7 +74,7 @@ function setup() {
   scored = createButton("Play!");
   scored.parent(cnv.parent());
   scored.size(200);
-  scored.position(300, -450, 'relative');
+  scored.position(300, 350, 'relative');
   scored.mousePressed(setScored);
 
   // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
