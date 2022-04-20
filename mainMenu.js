@@ -43,8 +43,8 @@ function setup() {
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
   MiningButton.class("spaceButton");
   MiningButton.mousePressed(function () {
-    window.location.href =
-      "https://tal-ashkenazi01.github.io/cautious-bassoon/asteroidMine.html";
+    location.href =
+      "asteroidMine.html";
   }); //put your game URL here
 
   ShootButton = createButton("Asteroid Shoot");
