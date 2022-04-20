@@ -40,7 +40,7 @@ let total_accuracy = 0.0;
 let average_accuracy = 0.0;
 let objects_run_through = 0.0;
 
-// LOAD FONTS FOR THE GAME
+// LOAD FONTS FOR THE GAME HERE
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
 }
