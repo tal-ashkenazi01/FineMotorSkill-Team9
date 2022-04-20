@@ -74,14 +74,14 @@ function setup() {
   scored = createButton("Play!");
   scored.parent(cnv.parent());
   scored.size(200);
-  scored.position(300, -450, 'relative');
+  scored.position(300, -450, 'fixed');
   scored.mousePressed(setScored);
 
   // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
   casual_game = createButton("Practice");
   casual_game.parent(cnv.parent());
   casual_game.size(200);
-  casual_game.position(300, -350, 'relative');
+  casual_game.position(300, -350, 'fixed');
   casual_game.mousePressed(setCasual);
 
   // STYLES OF THE BUTTONS
