@@ -6,7 +6,7 @@ let crater_list = {};
 
 // SET THE TEXT FONT
 function preload() {
-  SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  SpaceMono = loadFont("cautious-bassoon/assets/SpaceMono-Bold.ttf");
 }
 
 function setup() {
