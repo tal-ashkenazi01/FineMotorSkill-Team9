@@ -40,7 +40,10 @@ let total_accuracy = 0.0;
 let average_accuracy = 0.0;
 let objects_run_through = 0.0;
 
-// LOAD FONTS FOR THE GAME HERE
+// BUTTON PLACEMENT CORRECTIONS
+let cnvPos;
+
+// LOAD FONTS FOR THE GAME
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
 }
@@ -51,7 +54,8 @@ function setup() {
   screen_size = [800, 800];
   center = [screen_size[0] / 2, screen_size[1] / 2];
 
-  createCanvas(screen_size[0], screen_size[1]);
+  let cnv = createCanvas(screen_size[0], screen_size[1]);
+  cnvPos = cnv.position();
   background("#000000");
 
   // TEXT SETUP
@@ -68,13 +72,13 @@ function setup() {
   // CREATE THE BUTTON FOR TYPE OF GAME SESSION
   scored = createButton("Play!");
   scored.size(200);
-  scored.position(300, 350);
+  scored.position(cnvPos.x + 300, cnvPos.y + 350);
   scored.mousePressed(setScored);
 
   // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
   casual_game = createButton("Practice");
   casual_game.size(200);
-  casual_game.position(300, 450);
+  casual_game.position(cnvPos.x + 300, cnvPos.y + 450);
   casual_game.mousePressed(setCasual);
 
   // STYLES OF THE BUTTONS
@@ -490,7 +494,7 @@ function setCasual() {
 
     // MOVE THE CASUAL GAME BUTTON SO THAT IT ALLOWS USERS TO STOP THEIR PROGRESS
     casual_game.html("End Practice");
-    casual_game.position(300, center[1] * 0.3);
+    casual_game.position(cnvPos.x + 300, cnvPos.y + center[1] * 0.3);
 
     // NO LONG ON THE END SCREEN OR THE START MENU
     endScreenFlag = false;
@@ -533,9 +537,9 @@ function endScreen() {
   astCount = 0.0;
 
   // MOVE THE BUTTONS
-  scored.position(300, 400);
+  scored.position(cnvPos.x + 300, cnvPos.y + 400);
   scored.html("Play again?");
-  casual_game.position(300, 500);
+  casual_game.position(cnvPos.x + 300, cnvPos.y + 500);
 
   // SHOW THE BUTTONS AGAIN
   scored.show();
