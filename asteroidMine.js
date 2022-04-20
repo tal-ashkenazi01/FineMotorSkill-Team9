@@ -41,6 +41,7 @@ let average_accuracy = 0.0;
 let objects_run_through = 0.0;
 
 // BUTTON PLACEMENT CORRECTIONS
+let cnv;
 let cnvPos;
 
 // LOAD FONTS FOR THE GAME
@@ -54,7 +55,7 @@ function setup() {
   screen_size = [800, 800];
   center = [screen_size[0] / 2, screen_size[1] / 2];
 
-  let cnv = createCanvas(screen_size[0], screen_size[1]);
+  cnv = createCanvas(screen_size[0], screen_size[1]);
   cnvPos = cnv.position();
   background("#000000");
 
@@ -106,6 +107,8 @@ function setup() {
 }
 
 function draw() {
+  // UPDATE THE POSITION OF THE CANVAS
+  cnvPos = cnv.position();
   calculateAccuracy();
 
   if (!mouseIsPressed && started && !endScreenFlag) {
