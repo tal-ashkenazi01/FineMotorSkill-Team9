@@ -4,6 +4,10 @@
 var debug = 0;//debug var used to control whether debug stuff is shown
 var debugNode = null;
 
+// BUTTON PLACEMENT CORRECTIONS
+let cnv;
+let cnvPos;
+
 class spaceShip { //all sprite code taken and modified from: Daniel Shiffman
 // http://youtube.com/thecodingtrain
 // https://thecodingtrain.com/CodingChallenges/111-animated-sprite.html
@@ -421,11 +425,14 @@ function setup() {
     createCanvas(screenWidth, screenHeight);
 
     //--------------------GUI code used to create button at the top
-
-    HomeButton = createButton('Home');
-    HomeButton.position(15,15);
-    HomeButton.mousePressed(function() {window.location.href = "http://127.0.0.1:5500/MainMenu/";});//home button
-
+    
+    // FIND THE MIDDLE POSITION
+    cnv = createCanvas(800, 800);
+    cnvPos = cnv.position();
+  
+    // ADD THE MAIN MENU BUTTON
+    setUpReturn();
+    
     mazeObj = new Maze(screenWidth/2,screenHeight/2, 10);
     let frames = spritedata.frames;
     let animation = [];
@@ -443,6 +450,9 @@ function setup() {
 }
 
 function draw() {
+    // FIND THE MIDDLE POSITION AGAIN
+    cnvPos = cnv.position();
+    
     background(screenWidth);
 
     //-------------------------Main GUI used to draw rectangle and its associated graphics
@@ -490,4 +500,21 @@ function showNodeDebugInfo(){//used to display debug info related to the maze
             i++;
         });
     }
+}
+
+function setUpReturn() {
+    // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
+  returnButton = createButton("Main Menu");
+  returnButton.position(cnvPos.x + 200, cnvPos.y + 825);
+  returnButton.size(400);
+  returnButton.style("color", "#FFC600");
+  returnButton.style("background-color", "#5800FF");
+  returnButton.style("font-size", "20px");
+  returnButton.style("border", "none");
+  returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.class("spaceButton");
+  returnButton.mousePressed(function () {
+    location.href =
+      "index.html";
+  }); 
 }
