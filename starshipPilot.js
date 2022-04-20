@@ -422,10 +422,6 @@ screenHeight = 800;
 screenWidth = 800;//copy paste this code at the top of every game to have universal vars for screen size
 
 function setup() {
-    createCanvas(screenWidth, screenHeight);
-
-    //--------------------GUI code used to create button at the top
-    
     // FIND THE MIDDLE POSITION
     cnv = createCanvas(800, 800);
     cnvPos = cnv.position();
