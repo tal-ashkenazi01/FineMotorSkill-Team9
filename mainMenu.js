@@ -33,8 +33,6 @@ function setup() {
       ]);
     }
   }
-  // CANVAS POSITION IN THE MOMENT
-  let cnvPos = cnv.position();
 
   // CREATE BUTTONS FOR NAVIGATION
   MiningButton = createButton("Asteroid Mining");
