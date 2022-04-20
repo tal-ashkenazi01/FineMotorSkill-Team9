@@ -410,8 +410,8 @@ class Maze {
 }
 
 function preload(){
-    spritedata = loadJSON('SpaceShipSpriteSheet.json');
-    spritesheet = loadImage('spaceship.png');
+    spritedata = null;// loadJSON('SpaceShipSpriteSheet.json');
+    spritesheet = loadImage('assets/spaceship.png');
 }
 
 screenHeight = 800;
