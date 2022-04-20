@@ -4,6 +4,7 @@ html, body {
 }
 canvas {
   display: block;
+  border-style: ridge;
 }
 body {
   margin: 0;
