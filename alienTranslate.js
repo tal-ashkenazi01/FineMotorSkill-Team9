@@ -47,14 +47,12 @@ function compareWords() {
   // LOOP THROUGH THE VALUES IN THE STRING TO SEE IF THEY ARE EQUAL AT ALL POSITIONS
   for (let i = 0; i < inputString.length; i++) {
     if (inputString.charAt(i) !== word.charAt(i)) {
-      console.log("Unequal");
       count--;
       return false;
     } 
   }
   
   // IF ALL LETTERS AT ALL INDEXES ARE EQUAL, RETURN TRUE
-  console.log("Equal");
   count++;
   return true;
 }
