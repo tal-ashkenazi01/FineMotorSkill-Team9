@@ -74,14 +74,14 @@ function setup() {
   scored = createButton("Play!");
   scored.parent(cnv.parent());
   scored.size(200);
-  scored.position(300, -450, 'fixed');
+  scored.position(300, 350);
   scored.mousePressed(setScored);
 
   // CREATE THE BUTTON FOR THE CASUAL GAME SESSION
   casual_game = createButton("Practice");
   casual_game.parent(cnv.parent());
   casual_game.size(200);
-  casual_game.position(300, -350, 'fixed');
+  casual_game.position(300, 450);
   casual_game.mousePressed(setCasual);
 
   // STYLES OF THE BUTTONS
@@ -558,6 +558,7 @@ function endScreen() {
 function setUpReturn() {
     // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
+  returnButton.parent(cnv.parent());
   returnButton.position(200, 825);
   returnButton.size(400);
   returnButton.style("color", "#FFC600");
