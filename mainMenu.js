@@ -1,4 +1,6 @@
 let ring_graphics;
+// CANVAS ELEMENT
+let cnv;
 let coords = [];
 let screenHeight = 400;
 let screenWidth = 400; //copy paste this code at the top of every game to have universal vars for screen size
@@ -11,7 +13,7 @@ function preload() {
 }
 
 function setup() {
-  let cnv = createCanvas(800, 800, WEBGL);
+  cnv = createCanvas(800, 800, WEBGL);
   noStroke();
 
   // GENERATE THE IMAGE FOR THE RINGS
@@ -36,6 +38,7 @@ function setup() {
 
   // CREATE BUTTONS FOR NAVIGATION
   MiningButton = createButton("Asteroid Mining");
+  MiningButton.parent(cnv.parent());
   MiningButton.position(150, 600);
   MiningButton.size(200);
   MiningButton.style("color", "#FFC600");
@@ -49,6 +52,7 @@ function setup() {
   }); //put your game URL here
 
   ShootButton = createButton("Asteroid Shoot");
+  ShootButton.parent(cnv.parent());
   ShootButton.position(450, 600);
   ShootButton.size(200);
   ShootButton.style("color", "#FFC600");
@@ -62,6 +66,7 @@ function setup() {
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
+  PilotButton.parent(cnv.parent());
   PilotButton.position(450, 675);
   PilotButton.size(200);
   PilotButton.style("color", "#FFC600");
@@ -75,6 +80,7 @@ function setup() {
   }); //URL to maze game
 
   TranslateButton = createButton("Alien Translate");
+  TranslateButton.parent(cnv.parent());
   TranslateButton.position(150, 675);
   TranslateButton.size(200);
   TranslateButton.style("color", "#FFC600");
