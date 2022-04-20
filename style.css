@@ -6,6 +6,9 @@ canvas {
   display: block;
   border-style: ridge;
 }
+main {
+  position: relative;
+}
 body {
   margin: 0;
   display: flex;
