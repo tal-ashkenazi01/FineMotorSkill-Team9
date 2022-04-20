@@ -73,7 +73,7 @@ function setup() {
   PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
-    window.location.href = "http://127.0.0.1:5500/maze/";
+    location.href = "starshipPilot.html";
   }); //URL to maze game
 
   TranslateButton = createButton("Alien Translate");
