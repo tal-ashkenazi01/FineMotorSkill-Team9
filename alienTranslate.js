@@ -22,7 +22,7 @@ function setUpReturn() {
   // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
   returnButton.parent(cnv.parent());
-  returnButton.position(200, 810);
+  returnButton.position(200, 825);
   returnButton.size(400);
   returnButton.style("color", "#FFC600");
   returnButton.style("background-color", "#5800FF");
