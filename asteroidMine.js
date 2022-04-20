@@ -502,7 +502,7 @@ function setCasual() {
 
     // MOVE THE CASUAL GAME BUTTON SO THAT IT ALLOWS USERS TO STOP THEIR PROGRESS
     casual_game.html("End Practice");
-    casual_game.position(300, center[1] * 0.3, 'relative');
+    casual_game.position(300, center[1] * 0.3);
 
     // NO LONG ON THE END SCREEN OR THE START MENU
     endScreenFlag = false;
@@ -545,9 +545,9 @@ function endScreen() {
   astCount = 0.0;
 
   // MOVE THE BUTTONS
-  scored.position(300, 400, 'relative');
+  scored.position(300, 400);
   scored.html("Play again?");
-  casual_game.position(300, 500, 'relative');
+  casual_game.position(300, 500);
 
   // SHOW THE BUTTONS AGAIN
   scored.show();
@@ -558,7 +558,7 @@ function endScreen() {
 function setUpReturn() {
     // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
-  returnButton.position(200, 825, 'relative');
+  returnButton.position(200, 825);
   returnButton.size(400);
   returnButton.style("color", "#FFC600");
   returnButton.style("background-color", "#5800FF");
