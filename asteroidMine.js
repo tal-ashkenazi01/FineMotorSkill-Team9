@@ -95,6 +95,9 @@ function setup() {
   casual_game.style("border", "none");
   casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
   casual_game.class("spaceButton");
+  
+  // SET UP THE HOME BUTTON ON THE BOTTOM OF THE SCREEN
+  setUpReturn();
 
   // THE ACTUAL INITIAL OBJECT SETUP
   stroke("#E900FF");
@@ -546,3 +549,20 @@ function endScreen() {
   casual_game.show();
 }
 ///////////////////////////
+
+function setUpReturn() {
+    // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
+  returnButton = createButton("Main Menu");
+  returnButton.position(cnvPos.x + 200, cnvPos.y + 900);
+  returnButton.size(400);
+  returnButton.style("color", "#FFC600");
+  returnButton.style("background-color", "#5800FF");
+  returnButton.style("font-size", "20px");
+  returnButton.style("border", "none");
+  returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.class("spaceButton");
+  returnButton.mousePressed(function () {
+    location.href =
+      "..";
+  }); 
+}
