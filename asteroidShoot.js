@@ -214,7 +214,7 @@ function drawAsteroid(x_offset, y_offset, new_drawing) {
 function setUpReturn() {
     // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
-  returnButton.position(cnvPos.x + 200, cnvPos.y + 825);
+  returnButton.position(cnvPos.x + 200, cnvPos.y + 825, 'relative');
   returnButton.size(400);
   returnButton.style("color", "#FFC600");
   returnButton.style("background-color", "#5800FF");
