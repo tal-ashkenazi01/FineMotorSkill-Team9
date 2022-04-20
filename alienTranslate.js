@@ -27,8 +27,9 @@ function setup() {
   // CREATE THE INPUT BOX
   inp = createInput('');
   inp.parent(cnv.parent());
-  inp.position(400, 400);
-  inp.size(100);
+  inp.position(300, 400);
+  inp.size(200);
+  inp.class("spaceButton");
   
   // SET THE CALLBACK FUNCTION OF THE INPUT BOX
   inp.input(compareWords);
