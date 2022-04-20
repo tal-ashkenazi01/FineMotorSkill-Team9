@@ -11,7 +11,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(800, 800, WEBGL);
+  let cnv = createCanvas(800, 800, WEBGL);
   noStroke();
 
   // GENERATE THE IMAGE FOR THE RINGS
@@ -31,10 +31,12 @@ function setup() {
       ]);
     }
   }
+  // CANVAS POSITION IN THE MOMENT
+  let cnvPos = cnv.position();
 
   // CREATE BUTTONS FOR NAVIGATION
   MiningButton = createButton("Asteroid Mining");
-  MiningButton.position(150, 600);
+  MiningButton.position(cnvPos.x + 150, cnvPos.y + 600);
   MiningButton.size(200);
   MiningButton.style("color", "#FFC600");
   MiningButton.style("background-color", "#5800FF");
@@ -48,7 +50,7 @@ function setup() {
   }); //put your game URL here
 
   ShootButton = createButton("Asteroid Shoot");
-  ShootButton.position(450, 600);
+  ShootButton.position(cnvPos.x + 450, cnvPos.y + 600);
   ShootButton.size(200);
   ShootButton.style("color", "#FFC600");
   ShootButton.style("background-color", "#5800FF");
@@ -62,7 +64,7 @@ function setup() {
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
-  PilotButton.position(450, 675);
+  PilotButton.position(cnvPos.x + 450, cnvPos.y + 675);
   PilotButton.size(200);
   PilotButton.style("color", "#FFC600");
   PilotButton.style("background-color", "#5800FF");
@@ -75,7 +77,7 @@ function setup() {
   }); //URL to maze game
 
   TranslateButton = createButton("Alien Translate");
-  TranslateButton.position(150, 675);
+  TranslateButton.position(cnvPos.x + 150, cnvPos.y + 675);
   TranslateButton.size(200);
   TranslateButton.style("color", "#FFC600");
   TranslateButton.style("background-color", "#5800FF");
