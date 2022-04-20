@@ -22,6 +22,9 @@ function setup() {
   cnv = createCanvas(800, 800);
   cnvPos = cnv.position();
   
+  // ADD THE MAIN MENU BUTTON
+  setUpReturn();
+  
   background(0);
   x = random(0, 800);
   y = random(0, 800);
