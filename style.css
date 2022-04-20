@@ -20,5 +20,6 @@ body {
   src: url('assets/SpaceMono-Bold.ttf') format('truetype');
 }
 .spaceButton {
+  position: relative;
   font-family: 'SpaceMono';
 }
