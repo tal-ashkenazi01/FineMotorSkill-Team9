@@ -75,7 +75,7 @@ function setup() {
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
     location.href = "starshipPilot.html";
-  }); //URL to maze game
+  });
 
   TranslateButton = createButton("Alien Translate");
   TranslateButton.parent(cnv.parent());
@@ -88,9 +88,8 @@ function setup() {
   TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
   TranslateButton.class("spaceButton");
   TranslateButton.mousePressed(function () {
-    window.location.href =
-      "https://editor.p5js.org/Carson203/sketches/PJHVkRIeY";
-  }); //put your game URL here
+    location.href = "alienTranslate.html";
+  }); 
 }
 
 function draw() {
