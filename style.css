@@ -1,4 +1,5 @@
 html, body {
+  /* TO ALIGN VERTICALLY, USE "height: 100%;" HERE */
   margin: 0;
   padding: 0;
 }
