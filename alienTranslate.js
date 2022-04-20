@@ -1,6 +1,11 @@
 // BUTTON PLACEMENT CORRECTIONS
 let cnv;
 
+// WORD COMPARISON STORAGE
+let word;
+let count = 0;
+
+
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
@@ -14,8 +19,44 @@ function setup() {
   // FIND THE MIDDLE POSITION
   cnv = createCanvas(800, 800);
   
+  // CREATING THE WORD TO COMPARE THE NEW INPUT TOO
+  word = "this is the letters";
+  
+  // CREATE THE INPUT BOX
+  let inp = createInput('');
+  inp.parent(cnv.parent());
+  inp.position(0, 0);
+  inp.size(100);
+  
+  // SET THE CALLBACK FUNCTION OF THE INPUT BOX
+  inp.input(compareWords);
+  
   // ADD THE MAIN MENU BUTTON
   setUpReturn();
+}
+
+function compareWords() {
+  // SET THE INPUTSTRING EQUAL TO THE VALUE IN THE INPUT BOX
+  let inputString = this.value();
+  
+  // IF THE STRING IS EMPTY, RETURN FALSE
+  if (inputString.length == 0) {
+    return false;
+  }
+
+  // LOOP THROUGH THE VALUES IN THE STRING TO SEE IF THEY ARE EQUAL AT ALL POSITIONS
+  for (let i = 0; i < inputString.length; i++) {
+    if (inputString.charAt(i) !== word.charAt(i)) {
+      console.log("Unequal");
+      count--;
+      return false;
+    } 
+  }
+  
+  // IF ALL LETTERS AT ALL INDEXES ARE EQUAL, RETURN TRUE
+  console.log("Equal");
+  count++;
+  return true;
 }
 
 function setUpReturn() {
