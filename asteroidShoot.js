@@ -4,6 +4,10 @@ let radius = 50;
 let score = 0;
 let crater_list = {};
 
+// BUTTON PLACEMENT CORRECTIONS
+let cnv;
+let cnvPos;
+
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
@@ -14,7 +18,10 @@ function setup() {
   textFont(SpaceMono);
   textAlign(CENTER);
   
-  createCanvas(800, 800);
+  // FIND THE MIDDLE POSITION
+  cnv = createCanvas(800, 800);
+  cnvPos = cnv.position();
+  
   background(0);
   x = random(0, 800);
   y = random(0, 800);
@@ -31,6 +38,9 @@ function setup() {
 }
 
 function draw() {
+  // FIND THE MIDDLE POSITION AGAIN
+  cnvPos = cnv.position();
+  
   background(0);
   fill('#FFC600');
   noStroke(); 
@@ -196,4 +206,21 @@ function drawAsteroid(x_offset, y_offset, new_drawing) {
     // CREATE THE CRATERS
     circle(x+(width / 2) + x_offset, y+(height / 2) + y_offset, crater_radius)  
   }
+}
+
+function setUpReturn() {
+    // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
+  returnButton = createButton("Main Menu");
+  returnButton.position(cnvPos.x + 200, cnvPos.y + 825);
+  returnButton.size(400);
+  returnButton.style("color", "#FFC600");
+  returnButton.style("background-color", "#5800FF");
+  returnButton.style("font-size", "20px");
+  returnButton.style("border", "none");
+  returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.class("spaceButton");
+  returnButton.mousePressed(function () {
+    location.href =
+      "index.html";
+  }); 
 }
