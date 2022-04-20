@@ -25,7 +25,7 @@ function setup() {
   // CREATE THE INPUT BOX
   let inp = createInput('');
   inp.parent(cnv.parent());
-  inp.position(0, 0);
+  inp.position(400, 400);
   inp.size(100);
   
   // SET THE CALLBACK FUNCTION OF THE INPUT BOX
@@ -48,12 +48,17 @@ function compareWords() {
   for (let i = 0; i < inputString.length; i++) {
     if (inputString.charAt(i) !== word.charAt(i)) {
       count--;
+      inp.style('color', '#ff0000');
+      inp.attribute('maxLength', inputString.length);
       return false;
     } 
   }
   
   // IF ALL LETTERS AT ALL INDEXES ARE EQUAL, RETURN TRUE
   count++;
+  inp.attribute('maxLength', word.length);
+  inp.style('color', '#000000');
+
   return true;
 }
 
