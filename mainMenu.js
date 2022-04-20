@@ -241,18 +241,3 @@ function generateStarSky(rotation) {
     pop();
   }
 }
-
-//function used to place buttons in a specific way
-function setButtonPosition(button) {
-  startUIYPos = 330;
-  endUIYPos = 480;
-  totalUIHeight = endUIYPos - startUIYPos;
-  buttonYOffset = totalUIHeight / 3;
-  buttonYPosition = startUIYPos + (buttonYOffset * button.placement[0]) / 2;
-
-  buttonPositionX =
-    screenWidth / 2 -
-    (screenWidth / 4 + 50) +
-    (button.placement[1] * screenWidth) / 2;
-  button.position(buttonPositionX, buttonYPosition);
-}
