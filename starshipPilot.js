@@ -6,7 +6,6 @@ var debugNode = null;
 
 // BUTTON PLACEMENT CORRECTIONS
 let cnv;
-let cnvPos;
 
 class spaceShip { //all sprite code taken and modified from: Daniel Shiffman
 // http://youtube.com/thecodingtrain
@@ -423,9 +422,7 @@ screenWidth = 800;//copy paste this code at the top of every game to have univer
 
 function setup() {
     // FIND THE MIDDLE POSITION
-    cnv = createCanvas(800, 800);
-    cnvPos = cnv.position();
-  
+    cnv = createCanvas(800, 800);  
     // ADD THE MAIN MENU BUTTON
     setUpReturn();
     
@@ -446,8 +443,6 @@ function setup() {
 }
 
 function draw() {
-    // FIND THE MIDDLE POSITION AGAIN
-    cnvPos = cnv.position();
     
     background(screenWidth);
 
@@ -501,7 +496,8 @@ function showNodeDebugInfo(){//used to display debug info related to the maze
 function setUpReturn() {
     // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
-  returnButton.position(cnvPos.x + 200, cnvPos.y + 825, 'relative');
+  returnButton.parent(cnv.parent());
+  returnButton.position(200, 825);
   returnButton.size(400);
   returnButton.style("color", "#FFC600");
   returnButton.style("background-color", "#5800FF");
