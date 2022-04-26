@@ -28,14 +28,21 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
 
     rotation = 0;
     static animation = [];
+    currentNode;
 
     constructor(x, y) {
         super(x, y, 0);
+        this.currentNode = mazeObj.startNode;
 
         //import ship sprite related data
     }
   
     step() {
+        this.updateCurrentNode();
+        if(this.currentNode == null){
+            //we win
+            console.log("Winner!!!");
+        }
         push();
         angleMode(DEGREES);
         imageMode(CENTER);
@@ -56,10 +63,14 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
             if(distance > 30){
                 this.distanceVector.normalize();
                 this.index = 3;
+                if(!this.checkForXCollision()){
+                    this.x += this.distanceVector.x * 2;
+                }
+                if(!this.checkForYCollision()){
+                    this.y += this.distanceVector.y * 2;
+                }
                 //if x dem is free
-                this.x += this.distanceVector.x * 2;
                 //if y dem is free
-                this.y += this.distanceVector.y * 2;
             }
             //console.log(a);
         }else{
@@ -72,6 +83,48 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
         pop();
         rect(this.x, this.y, 1, 1); //rect representing hitbox cords of ship
     }
+    //used to check x cord against currentNode x
+    updateCurrentNode(){
+        if(abs(this.x - this.currentNode.nodeXPosition) > mazeNode.nodeSize/2){
+            if((this.x - this.currentNode.nodeXPosition) < 0){//negative if right
+                this.currentNode = this.currentNode.getNodeFromDirection(3);
+            }else{
+                this.currentNode = this.currentNode.getNodeFromDirection(1);
+            }
+        }
+        if(abs(this.y - this.currentNode.nodeYPosition) > mazeNode.nodeSize/2){
+            if((this.y - this.currentNode.nodeYPosition) < 0){//negative if above
+                this.currentNode = this.currentNode.getNodeFromDirection(0);
+            }else{
+                this.currentNode = this.currentNode.getNodeFromDirection(2);
+            }
+        }
+    }
+    checkForXCollision(){
+        if(abs(this.x - this.currentNode.nodeXPosition) > mazeNode.nodeSize/2 - 8){
+            if(this.x - this.currentNode.nodeXPosition < 0 && this.currentNode.walls.includes(3)){
+                this.x += 2;
+                return true;
+            }else if(this.x - this.currentNode.nodeXPosition > 0 && this.currentNode.walls.includes(1)){
+                this.x -= 2;
+                return true;
+            }
+        }
+        return false;
+    }
+    checkForYCollision(){
+        if(abs(this.y - this.currentNode.nodeYPosition) > mazeNode.nodeSize/2 - 8){
+            if(this.y - this.currentNode.nodeYPosition < 0 && this.currentNode.walls.includes(0)){
+                this.y += 2;
+                return true;
+            }else if(this.y - this.currentNode.nodeYPosition > 0 && this.currentNode.walls.includes(2)){
+                this.y -= 2;
+                return true;
+            }
+        }
+        return false;
+    }
+
     //updates distanceVector to be accurate based on current Mouse and ship position
     calculateDistance(){
         this.distanceVector = createVector(mouseX,mouseY).sub(createVector(this.x,this.y));
@@ -350,6 +403,8 @@ class Maze {
         this.mazeNodes.forEach(nodeArray => {
             nodeArray.forEach(Node => {
                 if(!Node.partOfPath){
+                    //TODO: 20% chance to add powerup to this location
+                    if()
                     this.path(Node, this.checkifEndGenericPath);
                 }
             });
