@@ -7,48 +7,179 @@ var debugNode = null;
 // BUTTON PLACEMENT CORRECTIONS
 let cnv;
 
-class spaceShip { //all sprite code taken and modified from: Daniel Shiffman
+class sprite {
+    static len;
+    a = 0;
+    constructor(x, y, speed) {
+        this.x = x;//obj x and y cord
+        this.y = y;
+        //this.animation = animation; //array of images representing sprites
+        //this.w = this.animation[0].width;//width of sprite
+        //this.len = this.animation.length;//length of sprite
+        this.speed = speed;//independent var representing image speed
+        this.index = 0;//sprite_index
+    }
+}
+
+class spaceShip extends sprite{ //all sprite code taken and modified from: Daniel Shiffman
 // http://youtube.com/thecodingtrain
 // https://thecodingtrain.com/CodingChallenges/111-animated-sprite.html
 // https://editor.p5js.org/codingtrain/sketches/vhnFx1mml
 
     rotation = 0;
+    static animation = [];
 
-    constructor(animation, x, y, speed) {
-      this.x = x;//obj x and y cord
-      this.y = y;
-      this.animation = animation; //array of images representing sprites
-      this.w = this.animation[0].width;//width of sprite
-      this.len = this.animation.length;//length of sprite
-      this.speed = speed;//independent var representing image speed
-      this.index = 0;//sprite_index
+    constructor(x, y) {
+        super(x, y, 0);
+
+        //import ship sprite related data
     }
   
     step() {
+        push();
+        angleMode(DEGREES);
+        imageMode(CENTER);
+        //check if should be lost
+        //this should be if distance is greater than X, or if ship cannot get to mouse
+        this.calculateDistance();
+        this.index = 0;
+        var distance = this.distanceVector.mag();
+        if(distance > 200){
+            this.lost = 1;
+        }else{
+            this.lost = 0;
+        }
 
-        //imageMode(CORNER);
-        angleMode(DEGREES);  
-        imageMode(CENTER)
-        let a = atan2(mouseY - this.y, mouseX - this.x);
-        console.log(a);
+        if(!this.lost){
+            this.a = atan2(mouseY - this.y, mouseX - this.x);
+            //update x and y ship cords to reflect moving towards mouse
+            if(distance > 30){
+                this.distanceVector.normalize();
+                this.index = 3;
+                //if x dem is free
+                this.x += this.distanceVector.x * 2;
+                //if y dem is free
+                this.y += this.distanceVector.y * 2;
+            }
+            //console.log(a);
+        }else{
+
+            //help me!
+        }
         translate(this.x, this.y);
-        rotate(a);//turn sprite based off of rotation var
-
-
-
-        let index = floor(this.index) % this.len;//continueously loop through sprite index using modulus
-        image(this.animation[index], 0, 0);//draw sprite onto screen
-        rotate(0);
+        rotate(this.a);//turn sprite based off of rotation var
+        this.draw();
+        pop();
+        rect(this.x, this.y, 1, 1); //rect representing hitbox cords of ship
+    }
+    //updates distanceVector to be accurate based on current Mouse and ship position
+    calculateDistance(){
+        this.distanceVector = createVector(mouseX,mouseY).sub(createVector(this.x,this.y));
+        //return createVector(mouseX,mouseY).sub(createVector(this.x,this.y)).mag();
     }
 
+    static setSpriteSheet(data, image){
+        data.frames.forEach(frame => {
+            let pos = frame.position;
+            let img = image.get(pos.x, pos.y, pos.w, pos.h);
+            spaceShip.animation.push(img);
+        });
+        spaceShip.len = spaceShip.animation.length;//length of sprite
+        console.log("Length in setSPrite: " + spaceShip.len);
+    }
+    //get node ship is currently in
+    getNode(){
+        return mazeObj.mazeNodes[this.x/mazeObj.size][this.y/mazeObj.size];
+    }
+    draw(){
+            this.index = floor(this.index) % spaceShip.len;//continueously loop through sprite index using modulus
+            image(spaceShip.animation[this.index], 0, 0);//draw sprite onto screen
+            //Note: the sprite must be always drawn at 0, 0 because thats where rotate's orgin is, and rotate always rotates relative to orgin
+            //we then use translate to offset the rendered sprite to actual position while maintaining 0, 0 render
+    }
   }
 
-class mazeNode {
-
+class asteroidWall{
     x;
     y;
+    length;
+    isHorizontal;
+
+    asteroids = [];
+      constructor(x, y, length, isHorizontal){
+        this.x = x;
+        this.y = y;
+        this.length = length;
+        this.isHorizontal = isHorizontal;
+
+        if(isHorizontal){
+            this.asteroids.push(new Asteroid(this.x - (this.length/3), this.y, 1));
+            this.asteroids.push(new Asteroid(this.x, this.y, 1));
+            this.asteroids.push(new Asteroid(this.x + (this.length/3), this.y, 1));
+        }else{
+            this.asteroids.push(new Asteroid(this.x, this.y - (this.length/3), 1));
+            this.asteroids.push(new Asteroid(this.x, this.y, 1));
+            this.asteroids.push(new Asteroid(this.x, this.y + (this.length/3), 1));
+        }
+
+      }
+}
+
+class Asteroid extends sprite{
+    
+    a = 0;
+    rotationSpeed;
+    size;
+    static animation = [];
+
+    constructor(x, y, size){
+        super(x, y, 0);
+        this.index = Math.round(Math.random(0,8));
+        this.rotationSpeed = Math.random(0.1,2);
+    }
+
+    step() {
+        push();
+        angleMode(DEGREES);
+        imageMode(CENTER);
+        translate(this.x, this.y);
+        this.a += this.rotationSpeed;
+        var rotation = (this.a % 360) - 180;
+        //console.log(this.a);
+        //console.log(rotation);
+        rotate(rotation);//turn sprite based off of rotation var
+        this.draw();
+        pop();
+    }
+
+    static setSpriteSheet(data, image){
+        data.frames.forEach(frame => {
+            let pos = frame.position;
+            let img = image.get(pos.x, pos.y, pos.w, pos.h);
+            Asteroid.animation.push(img);
+        });
+        spaceShip.len = Asteroid.animation.length;//length of sprite
+    }
+    draw(){
+        //console.log(this.animation);
+        this.index = floor(this.index) % spaceShip.len;//continueously loop through sprite index using modulus
+        image(Asteroid.animation[this.index], 0, 0);//draw sprite onto screen
+        //Note: the sprite must be always drawn at 0, 0 because thats where rotate's orgin is, and rotate always rotates relative to orgin
+        //we then use translate to offset the rendered sprite to actual position while maintaining 0, 0 render
+    }
+}
+
+class mazeNode {
+    
+    //Node Index in maze array
+    x;
+    y;
+    //actual node cordinate
+    nodeXPosition;
+    nodeYPosition;
     partOfPath; //used to check if this node is part of a path already
     partOfCurrentPath;//used for pathfind function to detect if this node is currently in use by this path but no other previous paths
+    static nodeSize;
 
     pathNodes = [];
     walls = [];
@@ -148,9 +279,11 @@ class Maze {
     shouldXBeDynamic;//vars used globally throughout Maze object to determine which cord to use for start and finish cordinates
     randomStartStatic;
     mazeNodes = [];
+    startNode;
     x;
     y;
     size;
+    asteroidWalls = [];
 
     constructor(x, y, Size) {
         this.x = x;
@@ -161,12 +294,16 @@ class Maze {
         this.createMazePaths();
 
         //generate walls based off of current paths
-        var nodeSize = (screenWidth*.25)/this.size;//defines size of nodes(75% of screen, then divided by amount of nodes)
-        var nodeCenterVar = this.size / 2.5;
+        mazeNode.nodeSize = (screenWidth*.75)/this.size;//defines size of nodes(75% of screen, then divided by amount of nodes)
+        var nodeCenterVar = -0.5*this.size + 0.5;
+        
 
         this.mazeNodes.forEach(nodeArray => {
             nodeArray.forEach(Node => {
                 Node.removeWalls();
+                Node.nodeXPosition = this.x + ((Node.x+nodeCenterVar)*(mazeNode.nodeSize*(1+debug)));//these are node cordinates scaled up based off of size
+                Node.nodeYPosition = this.y + ((Node.y+nodeCenterVar)*(mazeNode.nodeSize*(1+debug)));
+
                 if(debug){
                     var nodeXPosition = (Node.x-nodeCenterVar)*nodeSize;//these are node cordinates scaled up based off of size
                     var nodeYPosition = (Node.y-nodeCenterVar)*nodeSize;
@@ -174,11 +311,6 @@ class Maze {
                     var button = createButton(buttonID);
                     button.position((this.x+nodeXPosition)*2,(this.y+nodeYPosition)*2);
                     button.mousePressed(function() {debugNode = this.mazeNodes[Node.y][Node.x];}.bind(this));
-                    /*
-                    HomeButton = createButton('Home');
-                    HomeButton.position(15,15);
-                    HomeButton.mousePressed(function() {window.location.href = "http://127.0.0.1:5500/MainMenu/";});//home button
-                    */
                 }
             });
         });
@@ -228,46 +360,54 @@ class Maze {
         //then we run more path recursion to fill in empty nodes
     }
 
-    drawMaze(){//used to draw maze
-        var nodeSize = (screenWidth*.75)/this.size;//defines size of nodes(75% of screen, then divided by amount of nodes)
-        var nodeCenterVar = -0.5*this.size + 0.5;
-        var rectSizeBig = nodeSize; //size used to define longer edge of rectangles
+    drawMaze(){//used to set asteroid walls
+        
+        var rectSizeBig = mazeNode.nodeSize; //size used to define longer edge of rectangles
         var rectSizeSmall = .5; //size used to define smaller edge
 
-        var wallOffsetX = nodeSize/2;//used to offset walls from the exact center of nodes
-        var wallOffsetY = nodeSize/2;
+        var wallOffsetX = mazeNode.nodeSize/2;//used to offset walls from the exact center of nodes
+        var wallOffsetY = mazeNode.nodeSize/2;
 
         this.mazeNodes.forEach(nodeArray => {
             nodeArray.forEach(Node => {
 
-                //TODO: make this based off of maze cords instead of node.x and y cords
-                var nodeXPosition = (Node.x+nodeCenterVar)*(nodeSize*(1+debug));//these are node cordinates scaled up based off of size
-                var nodeYPosition = (Node.y+nodeCenterVar)*(nodeSize*(1+debug));
-                
                 Node.walls.forEach(num => {
 
                     if(num == 0){//upper wall
+                        /*
                         var rectOffsetX = rectSizeBig/2;//var used for offsetting rectangles due to them rendering from top left
                         var rectOffsetY = rectSizeSmall/2;
-                        rect((this.x+nodeXPosition)-rectOffsetX,(this.y+nodeYPosition)-wallOffsetY-rectOffsetY,rectSizeBig,rectSizeSmall);
+                        rect((Node.nodeXPosition)-rectOffsetX,(Node.nodeYPosition)-wallOffsetY-rectOffsetY,rectSizeBig,rectSizeSmall);
+                        */
+                       this.asteroidWalls.push(new asteroidWall((Node.nodeXPosition),(Node.nodeYPosition)-wallOffsetY,rectSizeBig,true));
                     }else if(num == 1){//right wall
+                        /*
                         var rectOffsetX = rectSizeSmall/2;//var used for offsetting rectangles due to them rendering from top left
                         var rectOffsetY = rectSizeBig/2;
-                        rect((this.x+nodeXPosition)+wallOffsetX-rectOffsetX,(this.y+nodeYPosition)-rectOffsetY,rectSizeSmall,rectSizeBig);
+                        rect((Node.nodeXPosition)+wallOffsetX-rectOffsetX,(Node.nodeYPosition)-rectOffsetY,rectSizeSmall,rectSizeBig);
+                        */
+                        this.asteroidWalls.push(new asteroidWall((Node.nodeXPosition)+wallOffsetX,(Node.nodeYPosition),rectSizeBig,false));
                     }else if(num == 2){//bottom wall
+                        /*
                         var rectOffsetX = rectSizeBig/2;//var used for offsetting rectangles due to them rendering from top left
                         var rectOffsetY = rectSizeSmall/2;
-                        rect((this.x+nodeXPosition)-rectOffsetX,(this.y+nodeYPosition)+wallOffsetY-rectOffsetY,rectSizeBig,rectSizeSmall);
+                        rect((Node.nodeXPosition)-rectOffsetX,(Node.nodeYPosition)+wallOffsetY-rectOffsetY,rectSizeBig,rectSizeSmall);
+                        */
+                        this.asteroidWalls.push(new asteroidWall((Node.nodeXPosition),(Node.nodeYPosition)+wallOffsetY,rectSizeBig,true));
                     }else if(num == 3){//left wall
+                        /*
                         var rectOffsetX = rectSizeSmall/2;//var used for offsetting rectangles due to them rendering from top left
                         var rectOffsetY = rectSizeBig/2;
-                        rect((this.x+nodeXPosition)-wallOffsetX-rectOffsetX,(this.y+nodeYPosition)-rectOffsetY,rectSizeSmall,rectSizeBig);
+                        rect((Node.nodeXPosition)-wallOffsetX-rectOffsetX,(Node.nodeYPosition)-rectOffsetY,rectSizeSmall,rectSizeBig);
+                        */
+                        this.asteroidWalls.push(new asteroidWall((Node.nodeXPosition)-wallOffsetX,(Node.nodeYPosition),rectSizeBig,false));
                     }
                     
                     //this.x-((nodeXPosition)*nodeSize)/this.size
                 });
             });
         });
+        
     }
 
     iterations = 0;//var used to safe guard against runaway recursion
@@ -290,11 +430,11 @@ class Maze {
                 this.iterations = 0;
                 //then return a value to end recursion
                 startPos.partOfPath = true;
-                console.log("Path found valid destination at ", (startPos.y*5)+startPos.x);
+                //console.log("Path found valid destination at ", (startPos.y*5)+startPos.x);
                 return true;
             } else {
                 while(possibleDirections > 0){ //while there are still viable paths from current node
-                    console.log("started while loop");
+                    //console.log("started while loop");
                     //we begin forming check for nextnode
                     var inc = 0; //resets inc value : this is used to count how many times we have to increment in the foreach loop
                     var direction = this.getRandom(1,possibleDirections);//assignment of direction to be considered from 0 to possible directions to account for previous iterations
@@ -308,11 +448,11 @@ class Maze {
                     var nextNode = startPos.getNodeFromDirection(direction);
 
                     if (nextNode != null && nextNode.partOfCurrentPath == false){//if the nodes next destination is not null and not part of a path already
-                        console.log("Trying to path from ", (startPos.y*5)+startPos.x, " to ",  (nextNode.y*this.mazeNodes.length)+nextNode.x); 
+                        //console.log("Trying to path from ", (startPos.y*5)+startPos.x, " to ",  (nextNode.y*this.mazeNodes.length)+nextNode.x); 
                         startPos.partOfCurrentPath = true;
                         pathComplete = this.path(nextNode, endCheck);//recursive case
                         if(pathComplete){//if pathToEnd is true, it means we have found a valid ending, and should now be building the path
-                            console.log("Created path from ", (startPos.y*5)+startPos.x, " to ",  (nextNode.y*this.mazeNodes.length)+nextNode.x);
+                            //console.log("Created path from ", (startPos.y*5)+startPos.x, " to ",  (nextNode.y*this.mazeNodes.length)+nextNode.x);
                             startPos.partOfPath = true;
                             //TODO: get rid of addNodetoPathDir and use just the regular version
                             startPos.addNodetoPathDir(direction);//add nextNode to current nodes path array
@@ -326,10 +466,10 @@ class Maze {
                             reason = "already pathed";
                         }
                         possibleDirections--;//if nextNode is not valid, then subtract possibleDirections and reloop
-                        console.log("Invalid next node: ", (nextNode == null ? "null" : (nextNode.y*this.mazeNodes.length)+nextNode.x) ," found from ", (startPos.y*5)+startPos.x, " reason: ", reason);
+                        //console.log("Invalid next node: ", (nextNode == null ? "null" : (nextNode.y*this.mazeNodes.length)+nextNode.x) ," found from ", (startPos.y*5)+startPos.x, " reason: ", reason);
                 }
                 if(!pathComplete){
-                    console.log("Failed path from ", (startPos.y*5)+startPos.x);
+                    //console.log("Failed path from ", (startPos.y*5)+startPos.x);
                 }
                 startPos.partOfCurrentPath = false;//reset partofcurrentpath
                 return pathComplete; //end condition indicating loop has completed, and will either have been sucessful or not
@@ -381,80 +521,99 @@ class Maze {
     getRandom(start, end){
         return Math.round(Math.random(start,end));
     }
-
+    //used to create and then access startNode of the maze
     getStartNode(){
-        var randomStartDynamic = this.getRandom(0,this.size);//random value between 0 and 4
-        this.randomStartStatic = this.getRandom(0,1);
-        if (this.randomStartStatic == 1){//sets static var to represent either 0 or 4
-            this.randomStartStatic = this.size - 1;
-        }
-        this.shouldXBeDynamic = this.getRandom(0,1); //bool used to determine which variable should be dynamic
-
-        if(this.shouldXBeDynamic){//creates a node with the specific start positions in mind with all combinations leading to edge cordinates 
-            var targetNode = this.mazeNodes[this.randomStartStatic][randomStartDynamic];
-            if(targetNode.y == 0){//this removes the outer wall to allow for entry and exit at this Node
-                targetNode.removeWall(0);
-                //targetNode
-            }else{
-                targetNode.removeWall(2);
-            }
-            return targetNode;
+        if(this.startNode != null){
+            return this.startNode;
         }else{
-            var targetNode = this.mazeNodes[randomStartDynamic][this.randomStartStatic];
-            if(targetNode.x == 0){
-                targetNode.removeWall(3);
-            }else{
-                targetNode.removeWall(1);
+            var randomStartDynamic = this.getRandom(0,this.size);//random value between 0 and 4
+            this.randomStartStatic = this.getRandom(0,1);
+            if (this.randomStartStatic == 1){//sets static var to represent either 1 edge or the other
+                this.randomStartStatic = this.size - 1;
             }
-            return targetNode;
+            this.shouldXBeDynamic = this.getRandom(0,1); //bool used to determine which variable should be dynamic
+
+            if(this.shouldXBeDynamic){//creates a node with the specific start positions in mind with all combinations leading to edge cordinates 
+                this.startNode = this.mazeNodes[this.randomStartStatic][randomStartDynamic];
+                /*
+                if(targetNode.y == 0){//this removes the outer wall to allow for entry and exit at this Node
+                    targetNode.removeWall(0);
+                    //targetNode
+                }else{
+                    targetNode.removeWall(2);
+                }
+                */
+                return this.startNode;
+            }else{
+                this.startNode = this.mazeNodes[randomStartDynamic][this.randomStartStatic];
+                /*
+                if(targetNode.x == 0){
+                    targetNode.removeWall(3);
+                }else{
+                    targetNode.removeWall(1);
+                }
+                */
+                return this.startNode;
+            }
         }
     }
 
 }
 
 function preload(){
-    spritedata = null;// loadJSON('SpaceShipSpriteSheet.json');
-    spritesheet = loadImage('assets/spaceship.png');
+    //load JSON's
+    spaceShipData = loadJSON('SpaceShipSpriteSheet.json');
+    asteroidData = loadJSON('AsteroidSpriteSheet.json');
+
+    //load spriteSheets
+    shipSheet = loadImage('assets/spaceship.png');
+    asteroidSheet = loadImage('assets/AsteroidProto.png');
 }
 
 screenHeight = 800;
 screenWidth = 800;//copy paste this code at the top of every game to have universal vars for screen size
+playerScore = 0;
 
 function setup() {
     // FIND THE MIDDLE POSITION
     cnv = createCanvas(800, 800);  
     // ADD THE MAIN MENU BUTTON
     setUpReturn();
+
+    spaceShip.setSpriteSheet(spaceShipData, shipSheet);
+    Asteroid.setSpriteSheet(asteroidData, asteroidSheet);
+
+    console.log(spaceShip.animation);
     
     mazeObj = new Maze(screenWidth/2,screenHeight/2, 10);
-    let frames = spritedata.frames;
-    let animation = [];
-    frames.forEach(sprite => {
-        let pos = sprite.position;
-        let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h);
-        animation.push(img);
-    });
     //create player ship
-    spaceShip = new spaceShip(animation, 100, 100, 0);
+    console.log(mazeObj.startNode);
+    console.log(mazeObj.startNode.nodeYPosition);
+    playerShip = new spaceShip(mazeObj.startNode.nodeXPosition, mazeObj.startNode.nodeYPosition);
     //TODO: make some node paths after main generation have powerups or rewards so their is incentive to explore the maze
     //TODO: maybe make a fog of war to make maze much harder to traverse
     //TODO: add in assets and realistic graphics to make this more like space
+    mazeObj.drawMaze();
     
 }
 
 function draw() {
-    
-    background(screenWidth);
 
     //-------------------------Main GUI used to draw rectangle and its associated graphics
     color(153,0,153);
+    background(screenWidth);
     stroke(153,0,153);
     strokeWeight(4);
     fill(0,0,0);
+    rect(0,0,screenWidth, screenHeight);
     rect(0,0,screenWidth,screenHeight/10);
     //text
     textSize(32);
     text('Starship Pilot',100,40);
+
+    text('Score: ',600,40);
+    text(playerScore, 700, 40);
+    playerScore++;
     /*
     rect(100,100,10,10);
     rect(200,200,10,10);
@@ -462,14 +621,18 @@ function draw() {
     rect(400,400,10,10);
     */
 
-    mazeObj.drawMaze();
-
     if(debug){
         showNodeDebugInfo();
     }
 
     //horsey = new Sprite(animation, 0, i * 75, random(0.1, 0.4));
-    spaceShip.step();
+    playerShip.step();
+
+    mazeObj.asteroidWalls.forEach(wallObj => {
+        wallObj.asteroids.forEach(asteroid => {
+            asteroid.step();
+        });
+    });
 
     //test circle
     //circle(100,100,100);

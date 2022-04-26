@@ -1,0 +1,85 @@
+{
+    "frames": [{
+        "name": "Asteroid0",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid1",
+        "position": {
+          "x": 34,
+          "y": 0,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid2",
+        "position": {
+          "x": 68,
+          "y": 0,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid3",
+        "position": {
+          "x": 0,
+          "y": 34,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid4",
+        "position": {
+          "x": 34,
+          "y": 34,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid5",
+        "position": {
+          "x": 68,
+          "y": 34,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid6",
+        "position": {
+          "x": 0,
+          "y": 68,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid7",
+        "position": {
+          "x": 34,
+          "y": 68,
+          "w": 35,
+          "h": 35
+        }
+      },
+      {
+        "name": "Asteroid8",
+        "position": {
+          "x": 68,
+          "y": 68,
+          "w": 35,
+          "h": 35
+        }
+      }
+    ]
+  }
+  
