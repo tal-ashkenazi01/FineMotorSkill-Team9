@@ -52,6 +52,12 @@ function setup() {
   MiningButton.style("font-size", "20px");
   MiningButton.style("border", "none");
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  MiningButton.mouseOver(function () {
+    MiningButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  MiningButton.mouseOut(function () {
+    MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   MiningButton.class("spaceButton");
   MiningButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "asteroidMine.html";})
@@ -67,6 +73,12 @@ function setup() {
   ShootButton.style("font-size", "20px");
   ShootButton.style("border", "none");
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  ShootButton.mouseOver(function () {
+    ShootButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  ShootButton.mouseOut(function () {
+    ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "asteroidShoot.html";})
@@ -82,6 +94,12 @@ function setup() {
   PilotButton.style("font-size", "20px");
   PilotButton.style("border", "none");
   PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  PilotButton.mouseOver(function () {
+    PilotButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  PilotButton.mouseOut(function () {
+    PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "starshipPilot.html";})
@@ -97,6 +115,12 @@ function setup() {
   TranslateButton.style("font-size", "20px");
   TranslateButton.style("border", "none");
   TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  TranslateButton.mouseOver(function () {
+    TranslateButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  TranslateButton.mouseOut(function () {
+    TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   TranslateButton.class("spaceButton");
   TranslateButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "alienTranslate.html";})
