@@ -40,8 +40,8 @@ function setup() {
   // SET UP THE INITIAL TEXT
   fill('#FFC600')
   textSize(30);
-  text("Score: " + score, 340, 55);
-  text("Asteroid Shooter", 290, 30);
+  text("Score: " + score, 400, 55);
+  text("Asteroid Shooter", 400, 30);
   setInterval(timeGame, 1000);
   frameRate(30);  
   
@@ -87,16 +87,16 @@ function draw() {
   stars(400, 400, 30, 70, 1500); 
   
   //SETS UP TEXT SIZE TO 30
-  textSize(30);                  
-  text("Score: " + score, 340, 55);
-  text("Asteroid Shooter", 290, 30);
+  textSize(30);
+  text("Score: " + score, 400, 55);
+  text("Asteroid Shooter", 400, 30);
   
   //SETS UP TIMER TO COUNT DOWN FROM 60 SECONDS
   if(timerVal <= 60) {             
-  text("" + timerVal, 375, 82);
+  text("" + timerVal, 400, 82);
   }
   if(timerVal == 0) {
-  text('Game Over', 315, 105);
+  text('Game Over', 400, 105);
   }
   
   //IF-ELSE STATEMENT TO CORRECTLY REDRAW ASTEROIDS WHILE THE TIMER COUNTS DOWN
@@ -197,7 +197,7 @@ function endScreen() {
   noLoop();
   background(0);
   textSize(50);
-  text(`Final Score: ${score}`, 250, 400);
+  text(`Final Score: ${score}`, 400, 400);
   fill('#ffc600')
   playAgain.show();
 }
