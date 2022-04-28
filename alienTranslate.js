@@ -22,7 +22,7 @@ function preload() {
   Horizon = loadFont("assets/HorizonElements2.otf");
   backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3');
   successBeep = loadSound('assets/completedBeep.mp3');
-  failureBeep = loadSound('assets/beep-02.wav');
+  failureBeep = loadSound('assets/errorBeep.mp3');
   buttonClick = loadSound('assets/buttonPress.mp3');
 }
 
