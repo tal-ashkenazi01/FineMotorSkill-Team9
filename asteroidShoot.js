@@ -11,6 +11,7 @@ let cnv;
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  buttonClick = loadSound("assets/buttonPress.mp3");
 }
 
 function setup() {
@@ -268,8 +269,15 @@ function setUpReturn() {
   returnButton.style("font-size", "20px");
   returnButton.style("border", "none");
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.mouseOver(function () {
+    returnButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  returnButton.mouseOut(function () {
+    returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
-    location.href = "index.html";
+    buttonClick.onended(function () {location.href = "index.html";})
+    buttonClick.play();
   }); 
 }
