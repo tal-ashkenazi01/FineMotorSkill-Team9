@@ -12,7 +12,7 @@ function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
   // LOAD THE SOUND
   soundFormats('mp3');
-  bgMusic = loadSound("/assets/BackgroundMusic-MM.mp3")
+  bgMusic = loadSound("assets/BackgroundMusic-MM.mp3")
 }
 
 function setup() {
