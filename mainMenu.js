@@ -245,8 +245,9 @@ function makeRings() {
   
   ////////////////////////// TESTING  
   // FIND THE BODY
-  let body = select('body');
-  body.style('background-image', ring_graphics);
+  let thisCanvas = document.getElementsByTagName('canvas')[0];
+  let linkImage = thisCanvas.toDataURL();
+  select('body').style('background-image', linkImage);
 
   // ROTATE THE RING
   rotateX(PI / 4);
