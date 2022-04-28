@@ -47,9 +47,17 @@ let cnvPos;
 // LOAD FONTS FOR THE GAME
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  // LOAD THE SOUND FOR THE GAME
+  soundFormats('mp3');
+  backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3')
+  buttonClick = loadSound('assets/buttonPress.mp3');
 }
 
 function setup() {
+  // PLAY THE BACKGROUND MUSIC  
+  backgroundMusic.play();
+  backgroundMusic.loop();
+  
   // SCREEN SIZE MODIFIERS
   // MODIFY THE SCREEN SIZE VALUES TO CHANGE THE SIZE OF THE GAME
   screen_size = [800, 800];
@@ -476,6 +484,7 @@ function drawAsteroid() {
 
 ///////////////////////////
 function setScored() {
+  buttonClick.play();
   // RESET THE TEXT INSIDE OF THE PLAY AGAIN BUTTON
   scored.html("Play!");
 
@@ -494,6 +503,7 @@ function setScored() {
 }
 
 function setCasual() {
+  buttonClick.play();
   // IF THE PRACTICE BUTTON IS PRESSED, THE GAME IS A CASUAL ONE
   if (!casual) {
     casual = true;
