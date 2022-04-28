@@ -47,9 +47,20 @@ let cnvPos;
 // LOAD FONTS FOR THE GAME
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  // LOAD THE SOUND FOR THE GAME
+  soundFormats('mp3');
+  backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3')
+  buttonClick = loadSound('assets/buttonPress.mp3');
+  miningLaser = loadSound('assets/MiningLaser.mp3');
+  miningSounds = loadSound('assets/MiningSounds.mp3');
+  asteroidExplosion = loadSound('assets/explosion.mp3');
 }
 
 function setup() {
+  // PLAY THE BACKGROUND MUSIC  
+  backgroundMusic.play();
+  backgroundMusic.loop();
+  
   // SCREEN SIZE MODIFIERS
   // MODIFY THE SCREEN SIZE VALUES TO CHANGE THE SIZE OF THE GAME
   screen_size = [800, 800];
@@ -90,6 +101,12 @@ function setup() {
   scored.style("font-size", "20px");
   scored.style("border", "none");
   scored.style("box-shadow", "0 0 0 .5em #5800FF");
+  scored.mouseOver(function () {
+    scored.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  scored.mouseOut(function () {
+    scored.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   scored.class("spaceButton");
 
   casual_game.style("color", "#FFC600");
@@ -97,6 +114,12 @@ function setup() {
   casual_game.style("font-size", "20px");
   casual_game.style("border", "none");
   casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
+  casual_game.mouseOver(function () {
+    casual_game.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  casual_game.mouseOut(function () {
+    casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   casual_game.class("spaceButton");
   
   // SET UP THE HOME BUTTON ON THE BOTTOM OF THE SCREEN
@@ -114,6 +137,8 @@ function draw() {
   calculateAccuracy();
 
   if (!mouseIsPressed && started && !endScreenFlag) {
+    miningLaser.stop();
+    miningSounds.stop();
     // RESET TEXT SIZE FOR ALL OTHER TEXT
     textSize((center[0] / 200) * 15);
 
@@ -202,7 +227,18 @@ function mouseDragged() {
     ) {
       // RETURN IF THE MOUSE IS AT THE START POSITION
       // console.log("THIS BLOCK WAS ENTERED")
+      asteroidExplosion.play();
       mouseIsPressed = false;
+    }
+    
+    // IF THE STARTING LASER SOUND IS NO LONGER PLAYING, LOOP THE OTHER SOUND
+    if (!miningLaser.isPlaying() && !miningSounds.isPlaying() && started) {
+      miningSounds.play();
+      miningSounds.loop();
+    } else if (!started) {
+      if (miningSounds.isLooping()) {
+        miningSounds.setLoop();
+      }
     }
 
     // DECLARE A NEW BOOOLEAN TO CONTROL WHETHER THE LINE IS ON THE OBJECT OR NOT
@@ -476,6 +512,7 @@ function drawAsteroid() {
 
 ///////////////////////////
 function setScored() {
+  buttonClick.play();
   // RESET THE TEXT INSIDE OF THE PLAY AGAIN BUTTON
   scored.html("Play!");
 
@@ -494,6 +531,7 @@ function setScored() {
 }
 
 function setCasual() {
+  buttonClick.play();
   // IF THE PRACTICE BUTTON IS PRESSED, THE GAME IS A CASUAL ONE
   if (!casual) {
     casual = true;
@@ -566,9 +604,15 @@ function setUpReturn() {
   returnButton.style("font-size", "20px");
   returnButton.style("border", "none");
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.mouseOver(function () {
+    returnButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  returnButton.mouseOut(function () {
+    returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
-    location.href =
-      "index.html";
+    buttonClick.onended(function () {location.href = "index.html";})
+    buttonClick.play();
   }); 
 }

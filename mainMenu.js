@@ -10,11 +10,19 @@ function preload() {
   planet_texture = loadImage("assets/planet_texture_map.jpeg");
   // LOAD IN THE FONT FOR THE TEXT
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  // LOAD THE SOUND
+  soundFormats('mp3');
+  bgMusic = loadSound("assets/BackgroundMusic-MM.mp3");
+  buttonClick = loadSound("assets/buttonPress.mp3");
 }
 
 function setup() {
   cnv = createCanvas(800, 800, WEBGL);
   noStroke();
+  
+  // PLAY THE BG MUSIC
+  bgMusic.play();
+  bgMusic.loop();
 
   // GENERATE THE IMAGE FOR THE RINGS
   generateRingImage();
@@ -44,9 +52,16 @@ function setup() {
   MiningButton.style("font-size", "20px");
   MiningButton.style("border", "none");
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  MiningButton.mouseOver(function () {
+    MiningButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  MiningButton.mouseOut(function () {
+    MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   MiningButton.class("spaceButton");
   MiningButton.mousePressed(function () {
-    location.href = "asteroidMine.html";
+    buttonClick.onended(function () {location.href = "asteroidMine.html";})
+    buttonClick.play();
   }); //put your game URL here
 
   ShootButton = createButton("Asteroid Shoot");
@@ -58,9 +73,16 @@ function setup() {
   ShootButton.style("font-size", "20px");
   ShootButton.style("border", "none");
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  ShootButton.mouseOver(function () {
+    ShootButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  ShootButton.mouseOut(function () {
+    ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
-    location.href = "asteroidShoot.html";
+    buttonClick.onended(function () {location.href = "asteroidShoot.html";})
+    buttonClick.play();
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
@@ -72,9 +94,16 @@ function setup() {
   PilotButton.style("font-size", "20px");
   PilotButton.style("border", "none");
   PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  PilotButton.mouseOver(function () {
+    PilotButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  PilotButton.mouseOut(function () {
+    PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
-    location.href = "starshipPilot.html";
+    buttonClick.onended(function () {location.href = "starshipPilot.html";})
+    buttonClick.play();
   });
 
   TranslateButton = createButton("Alien Translate");
@@ -86,9 +115,16 @@ function setup() {
   TranslateButton.style("font-size", "20px");
   TranslateButton.style("border", "none");
   TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  TranslateButton.mouseOver(function () {
+    TranslateButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  TranslateButton.mouseOut(function () {
+    TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   TranslateButton.class("spaceButton");
   TranslateButton.mousePressed(function () {
-    location.href = "alienTranslate.html";
+    buttonClick.onended(function () {location.href = "alienTranslate.html";})
+    buttonClick.play();
   }); 
 }
 
@@ -206,6 +242,12 @@ function makeRings() {
 
   // APPLY THE RING TEXTURE
   texture(ring_graphics);
+  
+  ////////////////////////// TESTING  
+//   // FIND THE BODY
+//   let thisCanvas = document.getElementsByTagName('canvas')[0];
+//   let linkImage = thisCanvas.toDataURL();
+//   select('body').style('background-image', linkImage);
 
   // ROTATE THE RING
   rotateX(PI / 4);
