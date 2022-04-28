@@ -12,7 +12,8 @@ function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
   // LOAD THE SOUND
   soundFormats('mp3');
-  bgMusic = loadSound("assets/BackgroundMusic-MM.mp3")
+  bgMusic = loadSound("assets/BackgroundMusic-MM.mp3");
+  buttonClick = loadSound("assets/buttonPress.mp3");
 }
 
 function setup() {
@@ -53,6 +54,7 @@ function setup() {
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
   MiningButton.class("spaceButton");
   MiningButton.mousePressed(function () {
+    buttonClick.play();
     location.href = "asteroidMine.html";
   }); //put your game URL here
 
@@ -67,6 +69,7 @@ function setup() {
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
+    buttonClick.play();
     location.href = "asteroidShoot.html";
   }); //put your game URL here
 
@@ -81,6 +84,7 @@ function setup() {
   PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
+    buttonClick.play();
     location.href = "starshipPilot.html";
   });
 
@@ -95,6 +99,7 @@ function setup() {
   TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
   TranslateButton.class("spaceButton");
   TranslateButton.mousePressed(function () {
+    buttonClick.play();
     location.href = "alienTranslate.html";
   }); 
 }
