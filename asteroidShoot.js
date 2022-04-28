@@ -55,6 +55,12 @@ function setup() {
   playAgain.style("font-size", "20px");
   playAgain.style("border", "none");
   playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  playAgain.mouseOver(function () {
+    playAgain.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  playAgain.mouseOut(function () {
+    playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   playAgain.class("spaceButton");
   playAgain.hide();
   playAgain.mousePressed(function () {
