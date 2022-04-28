@@ -53,7 +53,7 @@ function setup() {
   MiningButton.style("border", "none");
   MiningButton.style("box-shadow", "0 0 0 .5em #5800FF");
   MiningButton.class("spaceButton");
-  MiningButton.mousePressed(function () {}
+  MiningButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "asteroidMine.html";})
     buttonClick.play();
   }); //put your game URL here
