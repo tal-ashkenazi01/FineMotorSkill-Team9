@@ -10,11 +10,18 @@ function preload() {
   planet_texture = loadImage("assets/planet_texture_map.jpeg");
   // LOAD IN THE FONT FOR THE TEXT
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  // LOAD THE SOUND
+  soundFormats('mp3');
+  bgMusic = loadSound("/assets/BackgroundMusic-MM.mp3")
 }
 
 function setup() {
   cnv = createCanvas(800, 800, WEBGL);
   noStroke();
+  
+  // PLAY THE BG MUSIC
+  bgMusic.play();
+  bgMusic.loop();
 
   // GENERATE THE IMAGE FOR THE RINGS
   generateRingImage();
