@@ -20,6 +20,8 @@ function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
   Horizon = loadFont("assets/HorizonElements2.otf");
   backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3');
+  successBeep = loadSound('assets/completedBeep.mp3');
+  failureBeep = loadSound('assets/beep-02.wav');
   buttonClick = loadSound('assets/buttonPress.mp3');
 }
 
@@ -127,6 +129,7 @@ function compareWords() {
   inp.style('color', "#FFC600");
     
   if (inputString.length == word.length) {
+    successBeep.play();
     score++;
     chooseRandomWords();
     inp.value("");
