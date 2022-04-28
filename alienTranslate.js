@@ -18,10 +18,16 @@ let playAgain;
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
-  Horizon = loadFont("assets/HorizonElements2.otf")
+  Horizon = loadFont("assets/HorizonElements2.otf");
+  backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3');
+  buttonClick = loadSound('assets/buttonPress.mp3');
 }
 
 function setup() {
+  // PLAY THE BACKGROUND MUSIC  
+  backgroundMusic.play();
+  backgroundMusic.loop();
+  
   // FIND THE MIDDLE POSITION
   cnv = createCanvas(800, 800);
   
@@ -38,6 +44,12 @@ function setup() {
   playAgain.style("font-size", "20px");
   playAgain.style("border", "none");
   playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  playAgain.mouseOver(function () {
+  playAgain.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  playAgain.mouseOut(function () {
+    playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   playAgain.class("spaceButton");
   playAgain.hide();
   playAgain.mousePressed(startNewGame); 
@@ -152,6 +164,7 @@ function endScreen() {
 }
 
 function startNewGame() {
+  buttonClick.play();
   playAgain.hide();
   inp.show();
   timerVal = 60;
@@ -169,9 +182,15 @@ function setUpReturn() {
   returnButton.style("font-size", "20px");
   returnButton.style("border", "none");
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.mouseOver(function () {
+  returnButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  returnButton.mouseOut(function () {
+    returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
-    location.href =
-      "index.html";
+    buttonClick.onended(function () {location.href = "index.html";})
+    buttonClick.play();
   }); 
 }
