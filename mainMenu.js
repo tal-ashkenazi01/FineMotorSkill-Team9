@@ -244,10 +244,10 @@ function makeRings() {
   texture(ring_graphics);
   
   ////////////////////////// TESTING  
-  // FIND THE BODY
-  let thisCanvas = document.getElementsByTagName('canvas')[0];
-  let linkImage = thisCanvas.toDataURL();
-  select('body').style('background-image', linkImage);
+//   // FIND THE BODY
+//   let thisCanvas = document.getElementsByTagName('canvas')[0];
+//   let linkImage = thisCanvas.toDataURL();
+//   select('body').style('background-image', linkImage);
 
   // ROTATE THE RING
   rotateX(PI / 4);
