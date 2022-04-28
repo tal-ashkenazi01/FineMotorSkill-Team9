@@ -101,6 +101,12 @@ function setup() {
   scored.style("font-size", "20px");
   scored.style("border", "none");
   scored.style("box-shadow", "0 0 0 .5em #5800FF");
+  scored.mouseOver(function () {
+    scored.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  scored.mouseOut(function () {
+    scored.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   scored.class("spaceButton");
 
   casual_game.style("color", "#FFC600");
@@ -108,6 +114,12 @@ function setup() {
   casual_game.style("font-size", "20px");
   casual_game.style("border", "none");
   casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
+  casual_game.mouseOver(function () {
+    casual_game.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  casual_game.mouseOut(function () {
+    casual_game.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   casual_game.class("spaceButton");
   
   // SET UP THE HOME BUTTON ON THE BOTTOM OF THE SCREEN
@@ -592,6 +604,12 @@ function setUpReturn() {
   returnButton.style("font-size", "20px");
   returnButton.style("border", "none");
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.mouseOver(function () {
+    returnButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  returnButton.mouseOut(function () {
+    returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
     buttonClick.onended(function () {location.href = "index.html";})
