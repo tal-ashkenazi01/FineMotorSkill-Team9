@@ -242,6 +242,11 @@ function makeRings() {
 
   // APPLY THE RING TEXTURE
   texture(ring_graphics);
+  
+  ////////////////////////// TESTING  
+  // FIND THE BODY
+  let body = select('body');
+  body.style('background-image', ring_graphics);
 
   // ROTATE THE RING
   rotateX(PI / 4);
