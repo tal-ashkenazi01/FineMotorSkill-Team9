@@ -11,10 +11,15 @@ let cnv;
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
+  backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3')
   buttonClick = loadSound("assets/buttonPress.mp3");
+  asteroidExplosion = loadSound('assets/explosion.mp3');
 }
 
 function setup() {
+  // PLAY THE BACKGROUND MUSIC  
+  backgroundMusic.play();
+  backgroundMusic.loop();
   
   // SET THE TEXT FONT
   textFont(SpaceMono);
@@ -52,7 +57,9 @@ function setup() {
   playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
   playAgain.class("spaceButton");
   playAgain.hide();
-  playAgain.mousePressed(startNewGame);
+  playAgain.mousePressed(function () {
+    buttonClick.play();
+    startNewGame()});
 }
 
 function draw() {
@@ -101,6 +108,7 @@ function mousePressed(){
       x = random(0, 800);
       y = random(0, 800);
       background(0);
+      asteroidExplosion.play();
       drawAsteroid(x - 400, y - 400, true);
       score++;
     }
