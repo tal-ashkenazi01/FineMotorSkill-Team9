@@ -18,10 +18,15 @@ let playAgain;
 // SET THE TEXT FONT
 function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
-  Horizon = loadFont("assets/HorizonElements2.otf")
+  Horizon = loadFont("assets/HorizonElements2.otf");
+  backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3');
 }
 
 function setup() {
+  // PLAY THE BACKGROUND MUSIC  
+  backgroundMusic.play();
+  backgroundMusic.loop();
+  
   // FIND THE MIDDLE POSITION
   cnv = createCanvas(800, 800);
   
@@ -169,9 +174,15 @@ function setUpReturn() {
   returnButton.style("font-size", "20px");
   returnButton.style("border", "none");
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  returnButton.mouseOver(function () {
+  returnButton.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  returnButton.mouseOut(function () {
+    returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
-    location.href =
-      "index.html";
+    buttonClick.onended(function () {location.href = "index.html";})
+    buttonClick.play();
   }); 
 }
