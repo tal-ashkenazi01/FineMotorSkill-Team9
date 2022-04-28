@@ -1,8 +1,9 @@
-let timerVal = 60;
+let timerVal = 60;  
 let x, y;
 let radius = 50;
 let score = 0;
 let crater_list = {};
+let playAgain;
 
 // BUTTON PLACEMENT CORRECTIONS
 let cnv;
@@ -13,6 +14,7 @@ function preload() {
 }
 
 function setup() {
+  
   // SET THE TEXT FONT
   textFont(SpaceMono);
   textAlign(CENTER);
@@ -23,45 +25,67 @@ function setup() {
   // ADD THE MAIN MENU BUTTON
   setUpReturn();
   
+  //CREATES THE CANVAS AND SETS UP THE BACKGROUND AND INTIALIZES X AND Y
   background(0);
   x = random(0, 800);
   y = random(0, 800);
   drawAsteroid(x - 400, y - 400, true);
 
-  
   // SET UP THE INITIAL TEXT
   fill('#FFC600')
   textSize(30);
-  text("Score: " + score, 400, 55);
-  text("Asteroid Shooter", 400, 30);
+  text("Score: " + score, 340, 55);
+  text("Asteroid Shooter", 290, 30);
   setInterval(timeGame, 1000);
   frameRate(30);  
+  
+  //CREATES A PLAY AGAIN BUTTON TO RESTART THE GAME
+  playAgain = createButton("Play again?");
+  playAgain.parent(cnv.parent());
+  playAgain.position(200, 500);
+  playAgain.size(400);
+  playAgain.style("color", "#FFC600");
+  playAgain.style("background-color", "#5800FF");
+  playAgain.style("font-size", "20px");
+  playAgain.style("border", "none");
+  playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  playAgain.class("spaceButton");
+  playAgain.hide();
+  playAgain.mousePressed(startNewGame);
 }
 
-function draw() {  
+function draw() {
   background(0);
   fill('#FFC600');
   noStroke(); 
   
-  //These create surrounding stars
-  star(100, 700, 30, 70, 1000);
-  star(700, 100, 30, 70, 1000);
-  star(100, 100, 30, 70, 1000);
-  star(700, 700, 30, 70, 500);
+  //CREATE SURROUNDING STARS TO CREATE SPACE
+  star(100, 700, 100, 300, 5);
+  star(700, 100, 30, 70, 5);
+  star(100, 100, 30, 70, 5);
+  star(700, 700, 30, 70, 5);
+  star(500, 200, 30, 70, 5);
+  star(300, 600, 30, 70, 5);
+  star(150, 375, 30, 70, 5);
+  star(600, 450, 30, 70, 5);
   
-  stars(400, 400, 30, 70, 1500);  //Creates a sun in the center
+  //CREATES THE SUN IN THE CENTER OF THE SCREEN
+  stars(400, 400, 30, 70, 1500); 
   
-  textSize(30);
-  text("Score: " + score, 400, 55);
-  text("Asteroid Shooter", 400, 30);
+  //SETS UP TEXT SIZE TO 30
+  textSize(30);                  
+  text("Score: " + score, 340, 55);
+  text("Asteroid Shooter", 290, 30);
   
+  //SETS UP TIMER TO COUNT DOWN FROM 60 SECONDS
   if(timerVal <= 60) {             
-  text("" + timerVal, 400, 82);
+  text("" + timerVal, 375, 82);
   }
   if(timerVal == 0) {
-  text('Game Over', 400, 105);
+  text('Game Over', 315, 105);
   }
   
+  //IF-ELSE STATEMENT TO CORRECTLY REDRAW ASTEROIDS WHILE THE TIMER COUNTS DOWN
   if(crater_list == false){
     drawAsteroid(x - 400, y - 400, true);
   } else {
@@ -69,6 +93,7 @@ function draw() {
   }
 }
 
+//FUNCTION MOUSEPRESSED TO INCREMENT SCORE AND RANDOMLY PLACE ASTEROIDS AFTER BEING CLICKED
 function mousePressed(){
   let d = dist(mouseX, mouseY, x, y);
     if (d < radius) {
@@ -84,69 +109,95 @@ function mousePressed(){
       score--;
     }
 
+  //REDRAWS TEXT AFTER EACH PRESS AND UPDATES THE SCORE COUNTER
   fill('#FFC600')
   text("Score: " + score, 340, 55);
   text("Asteroid Shooter", 290, 30);
 }
 
-function timeGame() {    //Function to decrease time from the timer
+//FUNCTION TIMEGAME THAT COUNTS DOWN FROM 60
+function timeGame() {   
   if(timerVal > 0) {
     timerVal--;
+  } else if(timerVal <= 0){
+    endScreen();
   }
 }
 
-function star(x, y, radius1, radius2, points) {    //Function of the moving stars
+//FUNCTION TO CREATE STARS
+function star(x, y, radius_1, radius_2, points) { 
   
-  //Sets the color of the stars
-  fill('#00FFFF')
+  //SETS THE COLOR OF THE STARS
+  fill('#ffffa1')
   let angle = TWO_PI / points;
   let halfAngle = angle / 2.0;
   
-  //Begins the shape of the star
+  //CALCULATES THE SHAPE OF THE STARS
   beginShape();
   for (let a = 0; a < TWO_PI; a += angle) {
     
-    let sx = x + cos(a) * 15;  //Sets the radius 2 of the star
-    let sy = y + sin(a) * 15;  //Sets the radius 2 of the star
+    //SETS THE VARIBLE FOR SX AND SY
+    let sx = x + cos(a) * 10;  
+    let sy = y + sin(a) * 10; 
     
     vertex(sx, sy);
     
-    sx = x + cos(a + halfAngle) * 75;  //Sets the radius 1 of the star
-    sy = y + sin(a + halfAngle) * 75;  //Sets the radius 1 of the star
+    //CALCULATES THE VARIABLE FOR SX AND SY
+    sx = x + cos(a + halfAngle) * 5; 
+    sy = y + sin(a + halfAngle) * 5;
     
     vertex(sx, sy);
 }
   endShape(CLOSE);
 }
   
-function stars(x, y, radius1, radius2, points) {    //Function of the non-moving stars
+//FUNCTION TO CREATE THE SUN IN THE CENTER OF THE SCREEN
+function stars(x, y, radius1, radius2, points) { 
   
-  //Sets the color of the stars
+  //SETS THE COLOR OF THE SUN TO YELLOW
   fill('#FFFF00')
   let angle = TWO_PI / points;
   let halfAngle = angle / 2.0;
   
-  //Begins the shape of the star
+  //CALCULATES THE SHAPE OF THE STARS
   beginShape();
   for (let a = 0; a < TWO_PI; a += angle) {
     
-    let sx = x + cos(a) * 50;  //Sets the radius 2 of the star
-    let sy = y + sin(a) * 50;  //Sets the radius 2 of the star
+    //SETS THE VARIABLES SX AND SY
+    let sx = x + cos(a) * 50;  
+    let sy = y + sin(a) * 50;  
     
     vertex(sx, sy);
     
-    sx = x + cos(a + halfAngle) * 150;  //Sets the radius 1 of the star
-    sy = y + sin(a + halfAngle) * 150;  //Sets the radius 1 of the star
+    //CALCULATES THE VARIABLE FOR SX AND SY
+    sx = x + cos(a + halfAngle) * 150;  
+    sy = y + sin(a + halfAngle) * 150;  
     
     vertex(sx, sy);
 }
   endShape(CLOSE);
+}
+
+function endScreen() {
+  noLoop();
+  background(0);
+  textSize(50);
+  text(`Final Score: ${score}`, 250, 400);
+  fill('#ffc600')
+  playAgain.show();
+}
+
+function startNewGame() {
+  playAgain.hide();
+  timerVal = 60;
+  score = 0;
+  loop();
 }
 
 function drawAsteroid(x_offset, y_offset, new_drawing) {  
   // RANDOMIZE THE SEED
   if (new_drawing) {
-    noiseSeed(random(100));
+    noiseSeed(random(1000));
   }
     
   // BEGIN ASTEROID SHAPE
@@ -207,7 +258,7 @@ function drawAsteroid(x_offset, y_offset, new_drawing) {
 }
 
 function setUpReturn() {
-    // CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
+// CREATE THE BUTTON TO RETURN TO THE MAIN MENU WHEN THE GAME IS OVER
   returnButton = createButton("Main Menu");
   returnButton.parent(cnv.parent());
   returnButton.position(200, 825);
@@ -219,7 +270,6 @@ function setUpReturn() {
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
-    location.href =
-      "index.html";
+    location.href = "index.html";
   }); 
 }
