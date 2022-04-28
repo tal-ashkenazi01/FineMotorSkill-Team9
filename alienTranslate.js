@@ -20,6 +20,7 @@ function preload() {
   SpaceMono = loadFont("assets/SpaceMono-Bold.ttf");
   Horizon = loadFont("assets/HorizonElements2.otf");
   backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3');
+  buttonClick = loadSound('assets/buttonPress.mp3');
 }
 
 function setup() {
@@ -43,6 +44,12 @@ function setup() {
   playAgain.style("font-size", "20px");
   playAgain.style("border", "none");
   playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  playAgain.mouseOver(function () {
+  playAgain.style("box-shadow", "0 0 0 .55em #5800FF");
+  });
+  playAgain.mouseOut(function () {
+    playAgain.style("box-shadow", "0 0 0 .5em #5800FF");
+  });
   playAgain.class("spaceButton");
   playAgain.hide();
   playAgain.mousePressed(startNewGame); 
@@ -157,6 +164,7 @@ function endScreen() {
 }
 
 function startNewGame() {
+  buttonClick.play();
   playAgain.hide();
   inp.show();
   timerVal = 60;
