@@ -30,6 +30,7 @@ function setup() {
   // PLAY THE BACKGROUND MUSIC  
   backgroundMusic.play();
   backgroundMusic.loop();
+  failureBeep.playMode('untilDone');
   
   // FIND THE MIDDLE POSITION
   cnv = createCanvas(800, 800);
