@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('assets/starrySky.png');
+  background-image: url('/assets/backgroundAnimation.gif'); /* assets/starrySky.png');*/
   background-color: Black;
 }
 @font-face {
