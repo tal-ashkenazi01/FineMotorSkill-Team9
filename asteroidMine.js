@@ -594,6 +594,7 @@ function setUpReturn() {
   returnButton.style("box-shadow", "0 0 0 .5em #5800FF");
   returnButton.class("spaceButton");
   returnButton.mousePressed(function () {
+    buttonClick.play();
     location.href =
       "index.html";
   }); 
