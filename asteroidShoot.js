@@ -38,6 +38,7 @@ function setup() {
   drawAsteroid(x - 400, y - 400, true);
 
   // SET UP THE INITIAL TEXT
+  textAlign(CENTER);
   fill('#FFC600')
   textSize(30);
   text("Score: " + score, 400, 55);
