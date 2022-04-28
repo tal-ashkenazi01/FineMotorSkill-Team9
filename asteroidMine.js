@@ -53,6 +53,7 @@ function preload() {
   buttonClick = loadSound('assets/buttonPress.mp3');
   miningLaser = loadSound('assets/MiningLaser.mp3');
   miningSounds = loadSound('assets/MiningSounds.mp3');
+  asteroidExplosion = loadSound('assets/explosion.mp3');
 }
 
 function setup() {
@@ -214,6 +215,7 @@ function mouseDragged() {
     ) {
       // RETURN IF THE MOUSE IS AT THE START POSITION
       // console.log("THIS BLOCK WAS ENTERED")
+      asteroidExplosion.play();
       mouseIsPressed = false;
     }
     
