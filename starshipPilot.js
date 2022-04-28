@@ -9,6 +9,7 @@ let cnv;
 
 class sprite {
     static len;
+    actualIndex = 0;
     a = 0;
     constructor(x, y, speed) {
         this.x = x;//obj x and y cord
@@ -32,9 +33,7 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
 
     constructor(x, y) {
         super(x, y, 0);
-        this.currentNode = mazeObj.startNode;
-
-        //import ship sprite related data
+        this.setCurrentNode();
     }
   
     step() {
@@ -42,6 +41,8 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
         if(this.currentNode == null){
             //we win
             console.log("Winner!!!");
+            playerScore += 50;
+            restart();
         }
         push();
         angleMode(DEGREES);
@@ -85,12 +86,19 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
     }
     //used to check x cord against currentNode x
     updateCurrentNode(){
+        //console.log(this.currentNode);
+        if(this.currentNode == null){//used to prevent null exception
+            return;
+        }
         if(abs(this.x - this.currentNode.nodeXPosition) > mazeNode.nodeSize/2){
             if((this.x - this.currentNode.nodeXPosition) < 0){//negative if right
                 this.currentNode = this.currentNode.getNodeFromDirection(3);
             }else{
                 this.currentNode = this.currentNode.getNodeFromDirection(1);
             }
+        }
+        if(this.currentNode == null){//used to prevent null exception
+            return;
         }
         if(abs(this.y - this.currentNode.nodeYPosition) > mazeNode.nodeSize/2){
             if((this.y - this.currentNode.nodeYPosition) < 0){//negative if above
@@ -123,6 +131,11 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
             }
         }
         return false;
+    }
+    setCurrentNode(){
+        this.currentNode = mazeObj.startNode;
+        this.x = this.currentNode.nodeXPosition;
+        this.y = this.currentNode.nodeYPosition;
     }
 
     //updates distanceVector to be accurate based on current Mouse and ship position
@@ -219,6 +232,57 @@ class Asteroid extends sprite{
         image(Asteroid.animation[this.index], 0, 0);//draw sprite onto screen
         //Note: the sprite must be always drawn at 0, 0 because thats where rotate's orgin is, and rotate always rotates relative to orgin
         //we then use translate to offset the rendered sprite to actual position while maintaining 0, 0 render
+    }
+}
+
+class PowerUp extends sprite{
+    score = 0;
+    homeNode;
+    static animation = [];
+    constructor(x, y, node){
+        super(x, y, (1/7));
+        this.score = floor(random(1,5));
+        this.homeNode = node;
+        //TODO: create spritesheet for powerup
+    }
+
+    consume(){
+        playerScore += this.score;
+        mazeObj.powerups.splice(mazeObj.powerups.indexOf(this), 1);
+    }
+    step() {
+        if(playerShip.currentNode == this.homeNode){
+            this.consume();
+        }
+        push();
+        angleMode(DEGREES);
+        imageMode(CENTER);
+        translate(this.x, this.y);
+        //console.log(this.a);
+        //console.log(rotation);
+        this.draw();
+        pop();
+    }
+
+    static setSpriteSheet(data, image){
+        data.frames.forEach(frame => {
+            let pos = frame.position;
+            let img = image.get(pos.x, pos.y, pos.w, pos.h);
+            PowerUp.animation.push(img);
+        });
+        PowerUp.len = PowerUp.animation.length;//length of sprite
+    }
+    draw(){
+        //console.log(this.animation);
+        this.actualIndex += this.speed;
+        this.index = floor(this.actualIndex) % PowerUp.len;//continueously loop through sprite index using modulus
+        image(PowerUp.animation[this.index], 0, 0, 40, 40);//draw sprite onto screen
+        //Note: the sprite must be always drawn at 0, 0 because thats where rotate's orgin is, and rotate always rotates relative to orgin
+        //we then use translate to offset the rendered sprite to actual position while maintaining 0, 0 render
+    }
+    updateCordinates(){//this is used so we can move powerups to proper nodes after the node cordinates are set(because when first constructed, the mazeNodes are still at 0 ,0)
+        this.x = this.homeNode.nodeXPosition;
+        this.y = this.homeNode.nodeYPosition;
     }
 }
 
@@ -337,6 +401,7 @@ class Maze {
     y;
     size;
     asteroidWalls = [];
+    powerups = [];
 
     constructor(x, y, Size) {
         this.x = x;
@@ -356,6 +421,10 @@ class Maze {
                 Node.removeWalls();
                 Node.nodeXPosition = this.x + ((Node.x+nodeCenterVar)*(mazeNode.nodeSize*(1+debug)));//these are node cordinates scaled up based off of size
                 Node.nodeYPosition = this.y + ((Node.y+nodeCenterVar)*(mazeNode.nodeSize*(1+debug)));
+
+                this.powerups.forEach(powerup => {
+                    powerup.updateCordinates();
+                });
 
                 if(debug){
                     var nodeXPosition = (Node.x-nodeCenterVar)*nodeSize;//these are node cordinates scaled up based off of size
@@ -404,7 +473,9 @@ class Maze {
             nodeArray.forEach(Node => {
                 if(!Node.partOfPath){
                     //TODO: 20% chance to add powerup to this location
-                    if()
+                    if(random(100) < 20){
+                        this.powerups.push(new PowerUp(Node.nodeXPosition, Node.nodeYPosition, Node));
+                    }
                     this.path(Node, this.checkifEndGenericPath);
                 }
             });
@@ -619,10 +690,12 @@ function preload(){
     //load JSON's
     spaceShipData = loadJSON('SpaceShipSpriteSheet.json');
     asteroidData = loadJSON('AsteroidSpriteSheet.json');
+    gemData = loadJSON('Gem.json');
 
     //load spriteSheets
     shipSheet = loadImage('assets/spaceship.png');
     asteroidSheet = loadImage('assets/AsteroidProto.png');
+    gemSheet = loadImage('assets/Gem.png');
 }
 
 screenHeight = 800;
@@ -637,19 +710,14 @@ function setup() {
 
     spaceShip.setSpriteSheet(spaceShipData, shipSheet);
     Asteroid.setSpriteSheet(asteroidData, asteroidSheet);
+    PowerUp.setSpriteSheet(gemData, gemSheet);
 
-    console.log(spaceShip.animation);
-    
     mazeObj = new Maze(screenWidth/2,screenHeight/2, 10);
-    //create player ship
-    console.log(mazeObj.startNode);
-    console.log(mazeObj.startNode.nodeYPosition);
-    playerShip = new spaceShip(mazeObj.startNode.nodeXPosition, mazeObj.startNode.nodeYPosition);
-    //TODO: make some node paths after main generation have powerups or rewards so their is incentive to explore the maze
     //TODO: maybe make a fog of war to make maze much harder to traverse
-    //TODO: add in assets and realistic graphics to make this more like space
     mazeObj.drawMaze();
-    
+
+    //create player ship
+    playerShip = new spaceShip(mazeObj.startNode.nodeXPosition, mazeObj.startNode.nodeYPosition);
 }
 
 function draw() {
@@ -668,7 +736,7 @@ function draw() {
 
     text('Score: ',600,40);
     text(playerScore, 700, 40);
-    playerScore++;
+    //playerScore++;
     /*
     rect(100,100,10,10);
     rect(200,200,10,10);
@@ -687,6 +755,10 @@ function draw() {
         wallObj.asteroids.forEach(asteroid => {
             asteroid.step();
         });
+    });
+
+    mazeObj.powerups.forEach(powerup => {
+        powerup.step();
     });
 
     //test circle
@@ -727,4 +799,18 @@ function setUpReturn() {
     location.href =
       "index.html";
   }); 
+}
+
+function startGame(){//used to run all non foundation functions so game can restart
+    mazeObj = new Maze(screenWidth/2,screenHeight/2, 10);
+    //TODO: maybe make a fog of war to make maze much harder to traverse
+    mazeObj.drawMaze();
+    //reset currentNode so ship can be bound to maze again
+    playerShip.setCurrentNode();
+}
+
+function restart(){
+    console.log("restarting")
+    mazeObj = null;
+    startGame();
 }
