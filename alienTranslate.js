@@ -116,11 +116,12 @@ function compareWords() {
 
   // LOOP THROUGH THE VALUES IN THE STRING TO SEE IF THEY ARE EQUAL AT ALL POSITIONS
   for (let i = 0; i < inputString.length; i++) {
-    if (first) {
-      failureBeep.play();
-      first = false;
-    }
+
     if (inputString.charAt(i) !== word.charAt(i)) {
+      if (first) {
+        failureBeep.play();
+        first = false;
+      }
       count--;
       inp.style('color', '#ff0000');
       inp.attribute('maxLength', inputString.length);
