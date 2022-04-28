@@ -119,7 +119,7 @@ function compareWords() {
   for (let i = 0; i < inputString.length; i++) {
 
     if (inputString.charAt(i) !== word.charAt(i)) {
-      if (first) {
+      if (first && !failureBeep.isPlaying()) {
         failureBeep.play();
         first = false;
       }
