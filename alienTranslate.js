@@ -4,6 +4,7 @@ let cnv;
 // WORD COMPARISON STORAGE
 let word;
 let count = 0;
+let first = true;
 
 // SCORE TRACKING
 let score = 0;
@@ -115,6 +116,10 @@ function compareWords() {
 
   // LOOP THROUGH THE VALUES IN THE STRING TO SEE IF THEY ARE EQUAL AT ALL POSITIONS
   for (let i = 0; i < inputString.length; i++) {
+    if (first) {
+      failureBeep.play();
+      first = false;
+    }
     if (inputString.charAt(i) !== word.charAt(i)) {
       count--;
       inp.style('color', '#ff0000');
@@ -127,6 +132,7 @@ function compareWords() {
   count++;
   inp.attribute('maxLength', word.length);
   inp.style('color', "#FFC600");
+  first = true;
     
   if (inputString.length == word.length) {
     successBeep.play();
