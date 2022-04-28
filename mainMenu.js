@@ -69,8 +69,8 @@ function setup() {
   ShootButton.style("box-shadow", "0 0 0 .5em #5800FF");
   ShootButton.class("spaceButton");
   ShootButton.mousePressed(function () {
+    buttonClick.onended(function () {location.href = "asteroidShoot.html";})
     buttonClick.play();
-    location.href = "asteroidShoot.html";
   }); //put your game URL here
 
   PilotButton = createButton("Starship Pilot");
@@ -84,8 +84,8 @@ function setup() {
   PilotButton.style("box-shadow", "0 0 0 .5em #5800FF");
   PilotButton.class("spaceButton");
   PilotButton.mousePressed(function () {
+    buttonClick.onended(function () {location.href = "starshipPilot.html";})
     buttonClick.play();
-    location.href = "starshipPilot.html";
   });
 
   TranslateButton = createButton("Alien Translate");
@@ -99,8 +99,8 @@ function setup() {
   TranslateButton.style("box-shadow", "0 0 0 .5em #5800FF");
   TranslateButton.class("spaceButton");
   TranslateButton.mousePressed(function () {
+    buttonClick.onended(function () {location.href = "alienTranslate.html";})
     buttonClick.play();
-    location.href = "alienTranslate.html";
   }); 
 }
 
