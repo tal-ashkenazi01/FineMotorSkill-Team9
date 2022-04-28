@@ -51,6 +51,8 @@ function preload() {
   soundFormats('mp3');
   backgroundMusic = loadSound('assets/BackgroundMusic-AM.mp3')
   buttonClick = loadSound('assets/buttonPress.mp3');
+  miningLaser = loadSound('assets/MiningLaser.mp3');
+  miningSounds = loadSound('assets/MiningSounds.mp3');
 }
 
 function setup() {
@@ -122,6 +124,8 @@ function draw() {
   calculateAccuracy();
 
   if (!mouseIsPressed && started && !endScreenFlag) {
+    miningLaser.stop();
+    miningSounds.stop();
     // RESET TEXT SIZE FOR ALL OTHER TEXT
     textSize((center[0] / 200) * 15);
 
@@ -211,6 +215,16 @@ function mouseDragged() {
       // RETURN IF THE MOUSE IS AT THE START POSITION
       // console.log("THIS BLOCK WAS ENTERED")
       mouseIsPressed = false;
+    }
+    
+    // IF THE STARTING LASER SOUND IS NO LONGER PLAYING, LOOP THE OTHER SOUND
+    if (!miningLaser.isPlaying() && !miningSounds.isPlaying() && started) {
+      miningSounds.play();
+      miningSounds.loop();
+    } else if (!started) {
+      if (miningSounds.isLooping()) {
+        miningSounds.setLoop();
+      }
     }
 
     // DECLARE A NEW BOOOLEAN TO CONTROL WHETHER THE LINE IS ON THE OBJECT OR NOT
