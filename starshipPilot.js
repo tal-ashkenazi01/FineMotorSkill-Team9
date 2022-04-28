@@ -72,6 +72,7 @@ class spaceShip extends sprite{ //all sprite code taken and modified from: Danie
                 }
                 //if x dem is free
                 //if y dem is free
+            }else{
             }
             //console.log(a);
         }else{
@@ -243,11 +244,11 @@ class PowerUp extends sprite{
         super(x, y, (1/7));
         this.score = floor(random(1,5));
         this.homeNode = node;
-        //TODO: create spritesheet for powerup
     }
 
     consume(){
         playerScore += this.score;
+        coinCollect.play();
         mazeObj.powerups.splice(mazeObj.powerups.indexOf(this), 1);
     }
     step() {
@@ -258,8 +259,6 @@ class PowerUp extends sprite{
         angleMode(DEGREES);
         imageMode(CENTER);
         translate(this.x, this.y);
-        //console.log(this.a);
-        //console.log(rotation);
         this.draw();
         pop();
     }
@@ -696,6 +695,12 @@ function preload(){
     shipSheet = loadImage('assets/spaceship.png');
     asteroidSheet = loadImage('assets/AsteroidProto.png');
     gemSheet = loadImage('assets/Gem.png');
+    
+    bgMusic = loadSound('assets/BackgroundMusic-AM.mp3');
+    buttonClick = loadSound("assets/buttonPress.mp3");
+    coinCollect = loadSound("assets/collect-coin.wav");
+    restartLevelSound = loadSound("assets/SF-take-off-1.mp3");
+    
 }
 
 screenHeight = 800;
@@ -707,6 +712,7 @@ function setup() {
     cnv = createCanvas(800, 800);  
     // ADD THE MAIN MENU BUTTON
     setUpReturn();
+    bgMusic.loop();
 
     spaceShip.setSpriteSheet(spaceShipData, shipSheet);
     Asteroid.setSpriteSheet(asteroidData, asteroidSheet);
@@ -798,6 +804,7 @@ function setUpReturn() {
   returnButton.mousePressed(function () {
     location.href =
       "index.html";
+      buttonClick.play();
   }); 
 }
 
@@ -810,6 +817,7 @@ function startGame(){//used to run all non foundation functions so game can rest
 }
 
 function restart(){
+    restartLevelSound.play();
     console.log("restarting")
     mazeObj = null;
     startGame();
